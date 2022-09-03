@@ -1,25 +1,21 @@
 import java.util.Scanner;
 
 public class Clock {
-    static int hours;
-    static int minutes;
-    static int seconds;
+    private int hours;
+    private int minutes;
+    private int seconds;
     
-    Clock(int hours, int minutes, int seconds) {
+    public Clock(int hours, int minutes, int seconds) {
         this.hours = hours;
         this.minutes = minutes;
         this.seconds = seconds;
     }
 
-    public static String twoDigit(int helpme) {
-        if(helpme < 10){
-            return "0" + Integer.toString(helpme);
-        }
-        else {
-            return Integer.toString(helpme);
-        }
+    private String twoDigit(int n) {
+        return String.format("%02d", n);
     }
 
+    @Override
     public String toString() {
         return twoDigit(hours)+":"+twoDigit(minutes)+":"+twoDigit(seconds);
         //return String.format("%02d:%02d:%02d", hours, minutes, seconds);
@@ -28,6 +24,7 @@ public class Clock {
 
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
+        int hours,minutes,seconds;
         System.out.print("Hour? ");
         hours = in.nextInt();
         System.out.print("Minute? ");
@@ -38,8 +35,5 @@ public class Clock {
         Clock clock = new Clock(hours,minutes,seconds);
 
         System.out.println("The time is " + clock);
-
-
-
     }
 }
