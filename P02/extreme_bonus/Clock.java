@@ -21,7 +21,7 @@ public class Clock {
         Scanner in = new Scanner(System.in);
         int hours,minutes,seconds;
 
-        System.out.print("Add to previous clock:\nHour? ");
+        System.out.print("\nAdd to previous clock:\nHour? ");
         hours = in.nextInt();
 
         System.out.print("Minute? ");
