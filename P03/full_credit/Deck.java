@@ -8,7 +8,7 @@ public class Deck {
         Card newCard;
         Rank newRank;
         for(int i=0;i<3;i++) {
-            for(int j=0;j<10;j++) {
+            for(int j=(Rank.MIN);j<(Rank.MAX + 1);j++) {
                 newRank = new Rank(j);
                 newCard = new Card(newRank,Suit.values()[i]);
                 this.deck.push(newCard);
@@ -29,11 +29,10 @@ public class Deck {
             if (this.isEmpty()) {
                 throw new IndexOutOfBoundsException();
             }
-            Card curCard = this.deck.pop();
-            return curCard;
+            return this.deck.pop();
         }
         catch (IndexOutOfBoundsException e) {
-            throw new DeckEmptyException("Exception: Cannot deal from empty deck");
+            throw new DeckEmptyException();
         }
     }
 
