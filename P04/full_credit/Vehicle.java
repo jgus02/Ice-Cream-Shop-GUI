@@ -2,18 +2,20 @@ public abstract class Vehicle {
     private int year;
     private String make;
     private String model;
-    private BodyStyle bodystyle;
+    private BodyStyle bodyStyle;
 
-    @Override
-    public String toString{}(
-
-    )
+    public String toString(double miles){
+        double cost = dollarsToTravel(miles);
+        if(cost == -1) return "";
+        
+        return String.format("$%6.2f (range: %.2f) %d %s %s %s\n",dollarsToTravel(miles),range(),year,make,model,bodyStyle);
+    }
     
-    public double range();
+    public abstract double range();
     
-    public double fuelConsumed();
+    public abstract double fuelConsumed(double miles);
 
-    public double dollarsToTravel(double miles);
+    public abstract double dollarsToTravel(double miles);
 
     public Vehicle(int year, String make, String model, BodyStyle bodyStyle){
         this.year = year;

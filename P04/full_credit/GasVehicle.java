@@ -1,43 +1,43 @@
-public class ElectricVehicle extends Vehicle {
-    public static double centsPerKwhOElectricity = Double.NaN;
-    private double whPerMile;
-    private double kwhInBattery;
+public class GasVehicle extends Vehicle {
+    public static double dollarsPerGallonOfGas = Double.NaN;
+    private double milesPerGallon;
+    private double gallonsInTank;
 
-    public ElectricVehicle(int year, String make, String model, BodyStyle bodyStyle,
-                           double whPerMile, double kwhInBattery){
+    public GasVehicle(int year, String make, String model, BodyStyle bodyStyle,
+                           double milesPerGallon, double gallonsInTank){
         super(year,make,model,bodyStyle);
-        this.whPerMile = whPerMile;
-        this.kwhInBattery = kwhInBattery;
+        this.milesPerGallon = milesPerGallon;
+        this.gallonsInTank = gallonsInTank;
     }
 
     @Override
     public double range(){
-        return kwhInBattery / (whPerMile / 1000);
+        gallonsInTank * milesPerGallon
     }
-
     @Override
     public double fuelConsumed(double miles){
         double fuelRequired = Double.NaN;
         try{
-            fuelRequired = miles * (whPerMile / 1000);
-            if(fuelRequired > kwhInBattery) {
+            fuelRequired = miles * milesPerGallon;
+            if(fuelRequired > gallonsInTank) {
                 throw new ArithmeticException();
             }
         }
         catch (ArithmeticException e) {
-            if (fuelRequired == kwhInBattery) { //catches division by 0 which is
+            if (fuelRequired == gallonsInTank) { //catches division by 0 which is
                 return fuelRequired;            //equivalent to having exactly enough fuel
             }
             fuelRequired = Double.NaN; //if trip could not be made with this vehicle
         }
         return fuelRequired;
     }
-
-    @Override
+    
     public double dollarsToTravel(double miles){
         double fuelRequired = fuelConsumed(miles);
         if (fuelRequired == Double.NaN) return -1;
-        return fuelRequired * (centsPerKwhOElectricity / 100);
+        return fuelRequired * dollarsPerGallonOfGas;
     }
+
+
 
 }
