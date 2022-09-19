@@ -12,29 +12,29 @@ public class GasVehicle extends Vehicle {
 
     @Override
     public double range(){
-        gallonsInTank * milesPerGallon
+        return gallonsInTank * milesPerGallon;
     }
+
     @Override
     public double fuelConsumed(double miles){
-        double fuelRequired = Double.NaN;
+        double range = range();
         try{
-            fuelRequired = miles * milesPerGallon;
-            if(fuelRequired > gallonsInTank) {
+            if(miles > range) {
                 throw new ArithmeticException();
             }
         }
         catch (ArithmeticException e) {
-            if (fuelRequired == gallonsInTank) { //catches division by 0 which is
-                return fuelRequired;            //equivalent to having exactly enough fuel
-            }
-            fuelRequired = Double.NaN; //if trip could not be made with this vehicle
+            return Double.NaN; //if trip could not be made with this vehicle
         }
-        return fuelRequired;
+        return miles / milesPerGallon;
     }
     
+    @Override
     public double dollarsToTravel(double miles){
         double fuelRequired = fuelConsumed(miles);
-        if (fuelRequired == Double.NaN) return -1;
+        if (fuelRequired != fuelRequired){
+            return fuelRequired;
+            }
         return fuelRequired * dollarsPerGallonOfGas;
     }
 

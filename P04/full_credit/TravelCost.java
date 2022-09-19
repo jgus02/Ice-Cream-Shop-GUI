@@ -19,18 +19,19 @@ public class TravelCost {
         vehicles.add(new GasVehicle(     2022, "Chrysler", "Pacifica",        BodyStyle.Minivan,    24,  19  ));
         vehicles.add(new GasVehicle(     2022, "Chrysler", "Pacifica Hybrid", BodyStyle.Minivan,    30,  16.5));
 
-        Scanner userIn = new Scanner();
+        Scanner userIn = new Scanner(System.in);
 
         System.out.print("What is the price per gallon of gas in dollars?: ");
-        Systm.out.print(("What is the price per kWh of electricity in cents?: ");
+        GasVehicle.dollarsPerGallonOfGas = userIn.nextDouble();
+        System.out.print("What is the price per kWh of electricity in cents?: ");
         ElectricVehicle.centsPerKwhOfElectricity = userIn.nextDouble();
-        double miles = 0;
-        double 
+        System.out.print("How many miles is the trip?: ");
+        double miles = userIn.nextDouble();
 
         Vehicle vehicle;
         for(int i=0;i<vehicles.size();i++){
             vehicle = vehicles.get(i);
-            System.out.println(vehicle.toString(miles));
+            System.out.print(vehicle.toString(miles));
         }
     }
 }

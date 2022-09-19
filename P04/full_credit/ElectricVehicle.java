@@ -1,5 +1,5 @@
 public class ElectricVehicle extends Vehicle {
-    public static double centsPerKwhOElectricity = Double.NaN;
+    public static double centsPerKwhOfElectricity = Double.NaN;
     private double whPerMile;
     private double kwhInBattery;
 
@@ -17,27 +17,29 @@ public class ElectricVehicle extends Vehicle {
 
     @Override
     public double fuelConsumed(double miles){
-        double fuelRequired = Double.NaN;
+        double range = 0;
         try{
-            fuelRequired = miles * (whPerMile / 1000);
-            if(fuelRequired > kwhInBattery) {
+            range = range();
+            if(miles > range) {
                 throw new ArithmeticException();
             }
         }
         catch (ArithmeticException e) {
-            if (fuelRequired == kwhInBattery) { //catches division by 0 which is
-                return fuelRequired;            //equivalent to having exactly enough fuel
+            if (miles == range) { //catches division by 0 which is
+                return range;            //equivalent to having exactly enough fuel
             }
-            fuelRequired = Double.NaN; //if trip could not be made with this vehicle
+            return Double.NaN; //if trip could not be made with this vehicle
         }
-        return fuelRequired;
+        return miles * (whPerMile / 1000);
     }
 
     @Override
     public double dollarsToTravel(double miles){
         double fuelRequired = fuelConsumed(miles);
-        if (fuelRequired == Double.NaN) return -1;
-        return fuelRequired * (centsPerKwhOElectricity / 100);
+        if (fuelRequired != fuelRequired){
+            return fuelRequired;
+        }
+        return fuelRequired * (centsPerKwhOfElectricity / 100);
     }
 
 }

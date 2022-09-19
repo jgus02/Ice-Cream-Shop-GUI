@@ -6,9 +6,12 @@ public abstract class Vehicle {
 
     public String toString(double miles){
         double cost = dollarsToTravel(miles);
-        if(cost == -1) return "";
-        
-        return String.format("$%6.2f (range: %.2f) %d %s %s %s\n",dollarsToTravel(miles),range(),year,make,model,bodyStyle);
+        if(cost!=cost){
+            return "--" + year + " " + make + " " + model + " " + bodyStyle + " could not make this trip.\n";
+        }
+        else{
+            return String.format("$%6.2f (range: %.2f) %d %s %s %s\n",cost,range(),year,make,model,bodyStyle);
+        }
     }
     
     public abstract double range();
