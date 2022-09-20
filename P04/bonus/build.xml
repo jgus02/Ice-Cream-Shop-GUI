@@ -7,6 +7,7 @@
   <target name="build" description="Compile source tree java files">
     <javac debug="true" failonerror="true">
       <src path="."/>
+      <src path="./vehicles"/>
     </javac>
   </target>
   

@@ -1,0 +1,120 @@
+[33mcommit b1c02582395e21ddc75550037ea7f252ae486ce4[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: jgus02 <seg9917@mavs.uta.edu>
+Date:   Mon Sep 19 15:24:08 2022 -0500
+
+    removing outdated code from Vehicles.java
+
+[33mcommit cea12a2c29523c4746528abdca306eeffaa1b3c0[m
+Author: jgus02 <seg9917@mavs.uta.edu>
+Date:   Mon Sep 19 15:22:39 2022 -0500
+
+    un-overcomplicated full_credit
+
+[33mcommit 721c08303fdf43f74d132d843c30a0f851f532f6[m
+Author: jgus02 <seg9917@mavs.uta.edu>
+Date:   Mon Sep 19 15:16:17 2022 -0500
+
+    i should have done the bonus instead of overcomplicating the full credit
+
+[33mcommit b8d3d03f320959694625c5692c028ce0bd1d4fe2[m
+Author: jgus02 <seg9917@mavs.uta.edu>
+Date:   Sat Sep 17 15:21:57 2022 -0500
+
+    TODO: finish GasVehicles
+
+[33mcommit d09c1440d27b85608f6661267365dead25324a0d[m
+Author: jgus02 <seg9917@mavs.uta.edu>
+Date:   Sat Sep 17 10:57:00 2022 -0500
+
+    Started full_cred, finished Vehicle and ElectricVehicle
+
+[33mcommit a6f88ebcc07babe4e3bb2a70116f61455413923e[m
+Author: jgus02 <seg9917@mavs.uta.edu>
+Date:   Mon Sep 12 19:39:06 2022 -0500
+
+    IGNORE extreme bonus. Updated DeckEmptyException
+
+[33mcommit 5c906a88f45e2ae6d4eef91ed94a1dc12483d332[m
+Author: jgus02 <seg9917@mavs.uta.edu>
+Date:   Sat Sep 10 18:37:22 2022 -0500
+
+    Created and finished full_credit and bonus. I didn't have internet I'm sorry for not pushing while I wrote it ;-;
+
+[33mcommit 7a59ec4091be2c68d09f7286be027923f6ad12c4[m
+Author: jgus02 <seg9917@mavs.uta.edu>
+Date:   Mon Sep 5 09:38:02 2022 -0500
+
+    just checking
+
+[33mcommit 8b066f8746bca6c41c61d4a922f94f54bb95619f[m
+Author: jgus02 <seg9917@mavs.uta.edu>
+Date:   Sat Sep 3 23:11:20 2022 -0500
+
+    Finished and tested, just needs to be reviewed
+
+[33mcommit 7459cd5b8b75af8b25530d7eba181e4257a75df2[m
+Author: jgus02 <seg9917@mavs.uta.edu>
+Date:   Sat Sep 3 17:16:38 2022 -0500
+
+    Added build.xmls, finished bonus
+
+[33mcommit 6cbaf792464fcafbcf7ea740aadcaa02473ccba1[m
+Author: jgus02 <seg9917@mavs.uta.edu>
+Date:   Sat Sep 3 09:53:20 2022 -0500
+
+    Updated full_credit now meets all requirements.
+
+[33mcommit 8b2442cb9a1ab4d1573ea3264d8d26fc0fb31b62[m
+Author: jgus02 <seg9917@mavs.uta.edu>
+Date:   Wed Aug 31 22:41:15 2022 -0500
+
+    Second assignment dir created; full_credit code added
+
+[33mcommit c7f434c69ab0a6bc1348f1077a0de6868447a7f5[m
+Author: jgus02 <seg9917@mavs.uta.edu>
+Date:   Wed Aug 24 14:37:06 2022 -0500
+
+    how do i get rid of this
+
+[33mcommit 20a8e8efffbdd823cc602a552f4b7e67b4ced820[m
+Author: jgus02 <seg9917@mavs.uta.edu>
+Date:   Wed Aug 24 14:31:30 2022 -0500
+
+    Added screenshot of full credit test run.
+
+[33mcommit cb8b4f7881376acc2075a321afd13c8343bad245[m
+Author: jgus02 <seg9917@mavs.uta.edu>
+Date:   Wed Aug 24 14:28:47 2022 -0500
+
+    Added Linux screenshots to extreme bonus
+
+[33mcommit 4d55cea9865270fa2e059d725470701edd95912f[m
+Author: Jasper G <seg9917@mavs.uta.edu>
+Date:   Tue Aug 23 21:35:38 2022 -0500
+
+    P01 Extreme Bonus + Windows screenshots
+
+[33mcommit 868a309ffec2d8c866f53c11bc011be7636715bf[m
+Author: Jasper G <seg9917@mavs.uta.edu>
+Date:   Tue Aug 23 20:48:30 2022 -0500
+
+    P01 Bonus
+
+[33mcommit 63b761b8cc49333f41c721bb13615c860fbca47b[m
+Author: Jasper G <seg9917@mavs.uta.edu>
+Date:   Tue Aug 23 20:08:19 2022 -0500
+
+    created path for hello.java
+    created hello.java
+
+[33mcommit 4b501accd18f482f816ad03409e5e083f1753795[m[33m ([m[1;31morigin/full_credit[m[33m)[m
+Author: Jasper G <seg9917@mavs.uta.edu>
+Date:   Tue Aug 23 19:46:30 2022 -0500
+
+    test
+
+[33mcommit 6b180367a57a3b80f8bc6f67e5ade3091ab58349[m
+Author: jgus02 <111891614+jgus02@users.noreply.github.com>
+Date:   Tue Aug 23 17:47:38 2022 -0500
+
+    Initial commit
