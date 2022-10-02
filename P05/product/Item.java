@@ -7,6 +7,16 @@ public abstract class Item{
     private int price;
 
     public Item(String name, String description, int cost, int price){
+        if(name.isEmpty()){
+            throw new IllegalArgumentException("Field \"Name\" cannot be empty.\n");
+        }
+        if(cost < 0){
+            throw new IllegalArgumentException("Cost cannot be less than zero.\n");
+        }
+        if(price < 0){
+            throw new IllegalArgumentException("Price cannot be less than zero.\n");
+        }
+
         this.name = name;
         this.description = description;
         this.cost = cost;
