@@ -16,7 +16,9 @@ public class Scoop{
 
     @Override
     public String toString(){ //return "FLAVOR" or "FLAVOR with MIXIN[0]..., MIXIN[n-1], MIXIN[n]"
-        if(mixins.isEmpty()) return flavor.name();
+        if(mixins.isEmpty()){
+            return flavor.name();
+        }
 
         StringBuilder mixinList = new StringBuilder();
         for(MixIn i : mixins){
@@ -24,6 +26,6 @@ public class Scoop{
         }
         mixinList.delete(0,1); //remove first ", " separator
 
-        return flavor.name() + " with " + mixinList.toString();
-    }
+        return flavor.name() +" with"+ mixinList.toString(); //TODO: Remove extra space at the 
+    }                                                       //start of mixinList
 }
