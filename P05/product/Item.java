@@ -8,16 +8,16 @@ public abstract class Item{
 
     public Item(String name, String description, int cost, int price){
         if(name.isEmpty()){
-            throw new IllegalArgumentException("Field \"Name\" cannot be empty.\n");
+            throw new IllegalIceCreamException("Field \"Name\" cannot be empty.\n");
         }
         if(description.isEmpty()){
-            throw new IllegalArgumentException("Field \"Description\" cannot be empty.\n");
+            throw new IllegalIceCreamException("Field \"Description\" cannot be empty.\n");
         }
         if(cost < 0){
-            throw new IllegalArgumentException("Cost cannot be negative.\n");
+            throw new IllegalIceCreamException("Cost cannot be negative.\n");
         }
         if(!(price > cost)){
-            throw new IllegalArgumentException("Price must be greater than cost.\n");
+            throw new IllegalIceCreamException("Price must be greater than cost.\n");
         }
 
         this.name = name;
