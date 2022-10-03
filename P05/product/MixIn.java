@@ -8,7 +8,7 @@ public class MixIn{
         this.flavor = flavor;
         this.amount = amount;
     }
-
+    
     @Override
     public String toString(){
         if(amount==MixInAmount.Normal){

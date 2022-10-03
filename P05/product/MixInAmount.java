@@ -5,4 +5,4 @@ public enum MixInAmount{
     Normal,
     Extra,
     Drenched;
-}
+} 
