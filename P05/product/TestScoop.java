@@ -6,14 +6,14 @@ public class TestScoop{
     private static String errorFormat;
 
     private boolean failed(Item item, String expected){
-        if((item.name()+item.description()+item.cost+item.price).equals(expected)){
-            errorFormat = item.name()+item.description()+item.cost+item.price;
+        if((item.name()+item.description()+item.cost()+item.price()).equals(expected)){
+            errorFormat = item.name()+item.description()+item.cost()+item.price();
             return false;
         }
         return true;
     }
     private boolean failed(Scoop scoop, String expected){
-
+        return false;
     }
 
     public void main(String[] args){
@@ -23,22 +23,22 @@ public class TestScoop{
                 System.err.println("\nERROR: Valid MixInFlavor behaved unexpectedly: " + errorFormat);
             }
         }
-        catch (IllegalArgumentException e){
-            System.err.println("\nERROR: Valid MixInFlavor was not able to be created: " + e.getMessage());
+        catch (Exception e){
+            System.err.println("\nERROR: Valid MixInFlavor was not able to be created: " + e.getClass() + " = " + e.getMessage());
         }
 
         try{    //no desc
             failed(new MixInFlavor("name","",0,0),"name00");
             System.err.println("\nERROR: Invalid MixInFlavor (no description, cost == 0, price = cost  ) was successfully created: " + errorFormat);
         }
-        catch (IllegalArgumentException e){
+        catch (Exception e){
         }
 
         try{    //no name, no desc, cost<0, price<cost
             failed(new MixInFlavor("","",-1,-2),"-1-2");
             System.err.println("\nERROR: Invalid MixInFlavor (no name or description, cost < 0, price < cost) was successfully created: " + errorFormat);
         }
-        catch (IllegalArgumentException e){
+        catch (Exception e){
         }
 
         try{    //foreign letters in name
@@ -46,8 +46,8 @@ public class TestScoop{
                 System.err.println("\nERROR: Valid MixInFlavor behaved unexpectedly: " + errorFormat);
             }
         }
-        catch (IllegalArgumentException e){
-            System.err.println("\nERROR: Valid MixInFlavor was not able to be created: " + e.getMessage());
+        catch (Exception e){
+            System.err.println("\nERROR: Valid MixInFlavor was not able to be created: " + e.getClass() + " = " + e.getMessage());
         }
         //ICE-CREAM FLAVOR
         try{    //normal
@@ -55,15 +55,15 @@ public class TestScoop{
                 System.err.println("\nERROR: Valid IceCreamFlavor behaved unexpectedly: " + errorFormat);
             }
         }
-        catch (IllegalArgumentException e){
-            System.err.println("\nERROR: Valid IceCreamFlavor was not able to be created: " + e.getMessage());
+        catch (Exception e){
+            System.err.println("\nERROR: Valid IceCreamFlavor was not able to be created: " + e.getClass() + " = " + e.getMessage() );
         }
 
         try{
             Scoop testScoop = new Scoop(new IceCreamFlavor("name","desc",0,1));
         }
-        catch (IllegalArgumentException e){
-            System.err.println("\nERROR: Valid IceCreamFlavor was not able to be created within Scoop: " + e.getMessage());
+        catch (Exception e){
+            System.err.println("\nERROR: Valid IceCreamFlavor was not able to be created within Scoop: " + e.getClass() + " = " + e.getMessage());
         }
     }
 }
