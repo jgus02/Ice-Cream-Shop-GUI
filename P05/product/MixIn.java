@@ -12,7 +12,7 @@ public class MixIn{
     @Override
     public String toString(){
         if(amount==MixInAmount.Normal){
-            return flavor.toString();
+            return flavor.name();
         }
         return flavor.name() + " (" + amount.name() + ")";
     }
