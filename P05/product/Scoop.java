@@ -24,6 +24,6 @@ public class Scoop{
         }
         mixinList.delete(0,1); //remove first ", " separator
 
-        return flavor.name() + " with " + mixinList;
+        return flavor.name() + " with " + mixinList.toString();
     }
 }
