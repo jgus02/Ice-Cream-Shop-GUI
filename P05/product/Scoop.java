@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class Scoop{
     private IceCreamFlavor flavor;
-    private ArrayList<MixIn> mixins; //is this supposed to be an arraylist?
+    private ArrayList<MixIn> mixins; //arraylist or array?
 
     public Scoop(IceCreamFlavor flavor){
         this.flavor = flavor;
@@ -16,7 +16,7 @@ public class Scoop{
 
     @Override
     public String toString(){ //return "FLAVOR" or "FLAVOR with MIXIN[0]..., MIXIN[n-1], MIXIN[n]"
-        if(mixins.isEmpty()) return flavor.toString();
+        if(mixins.isEmpty()) return flavor.name();
 
         StringBuilder mixinList = new StringBuilder();
         for(MixIn i : mixins){
@@ -24,6 +24,6 @@ public class Scoop{
         }
         mixinList.delete(0,1); //remove first ", " separator
 
-        return flavor.toString() + " with " + mixinList;
+        return flavor.name() + " with " + mixinList;
     }
 }
