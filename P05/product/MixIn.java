@@ -14,6 +14,6 @@ public class MixIn{
         if(amount==MixInAmount.Normal){
             return flavor.toString();
         }
-        return flavor.toString() + " (" + amount.toString() + ")";
+        return flavor.name() + " (" + amount.name() + ")";
     }
 }
