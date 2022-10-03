@@ -10,11 +10,14 @@ public abstract class Item{
         if(name.isEmpty()){
             throw new IllegalArgumentException("Field \"Name\" cannot be empty.\n");
         }
-        if(cost < 0){
-            throw new IllegalArgumentException("Cost cannot be less than zero.\n");
+        if(description.isEmpty()){
+            throw new IllegalArgumentException("Field \"Description\" cannot be empty.\n");
         }
-        if(price < 0){
-            throw new IllegalArgumentException("Price cannot be less than zero.\n");
+        if(cost < 0){
+            throw new IllegalArgumentException("Cost cannot be negative.\n");
+        }
+        if(!(price > cost)){
+            throw new IllegalArgumentException("Price must be greater than cost.\n");
         }
 
         this.name = name;
