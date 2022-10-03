@@ -51,6 +51,6 @@ public abstract class Item{
         public IllegalIceCreamException(String message){
             super(message);
         }
-    };
+    }
 
 }
