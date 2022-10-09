@@ -24,8 +24,8 @@ public class Scoop{
         for(MixIn i : mixins){
             mixinList.append(", " + i.toString());
         }
-        mixinList.delete(0,1); //remove first ", " separator
+        mixinList.delete(0,1); //removes first ", " separator
 
-        return flavor.name() +" with"+ mixinList.toString(); //TODO: Remove extra space at the 
-    }                                                       //start of mixinList
+        return flavor.name() +" with"+ mixinList.toString(); 
+    }
 }
