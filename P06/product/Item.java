@@ -1,29 +1,33 @@
 package product;
 
 public abstract class Item{
-    private String name;
-    private String description;
-    private int cost;
-    private int price;
+    protected String name;
+    protected String description;
+    protected int cost;
+    protected int price;
 
     public Item(String name, String description, int cost, int price){
+        dataValidation(name,description,cost,price);
+
+        this.name           = name; //does this make me code better
+        this.description    = description;
+        this.cost           = cost;
+        this.price          = price;
+    }
+
+    private void dataValidation(String name, String description, int cost, int price){
         if(name.isEmpty()){
-            throw new IllegalIceCreamException("Field \"Name\" cannot be empty.\n");
+            throw new IllegalIceCreamException("Field \"name\" cannot be empty.\n");
         }
         if(description.isEmpty()){
-            throw new IllegalIceCreamException("Field \"Description\" cannot be empty.\n");
+            throw new IllegalIceCreamException("Field \"description\" cannot be empty.\n");
         }
         if(cost < 0){
             throw new IllegalIceCreamException("Cost cannot be negative.\n");
         }
-        if(!(price > cost)){
-            throw new IllegalIceCreamException("Price must be greater than cost.\n");
+        if((price < cost)){
+            throw new IllegalIceCreamException("Price cannot be less than cost.\n");
         }
-
-        this.name = name;
-        this.description = description;
-        this.cost = cost;
-        this.price = price;
     }
 
     public String name(){
