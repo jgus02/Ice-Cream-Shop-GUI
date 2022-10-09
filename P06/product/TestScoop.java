@@ -1,7 +1,11 @@
-package product;
 import java.util.ArrayList;
 import java.util.Scanner;
-
+import product.IceCreamFlavor;
+import product.MixInFlavor;
+import product.MixInAmount;
+import product.MixIn;
+import product.Scoop;
+import product.Item;
 public class TestScoop{
     private static String errorFormat;
 
