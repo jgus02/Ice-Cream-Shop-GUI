@@ -15,11 +15,14 @@ import product.MixIn;
 import product.Scoop;
 import product.Item;
 
+import emporium.Emporium;
+
 /*import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;*/ //THIEVED CODE WRITE YOUR OWN
 
 public class MainWin extends JFrame{
+    Emporium emporium = new Emporium();
     public MainWin(String titleBar){
         super(titleBar); 
 
@@ -67,10 +70,11 @@ public class MainWin extends JFrame{
         menuBar.add(help);
         setJMenuBar(menuBar);
         //
-        // ---------- T O O L   B A R ----------
+        // ---------- T O O L   B A R ----------        //TODO
         /*JToolBar toolbar = new JToolBar("Options");
 
-        JButton iceCreamCreateB = new JButton*/ //nevermind i don't know what to do here
+        JButton iceCreamCreateB = new JButton*/ 
+        setVisible(true);
     }
 
     // -------- File  Listeners ---------
@@ -93,13 +97,17 @@ public class MainWin extends JFrame{
     //
     // ------- Create Listeners ------------
     protected void onIceCreamCreateClick(){
-        IceCreamFlavor newIceCream;
-        //CreateFlavorJOptionPane flavorCreationDialog = new CreateFlavorJOptionPane(Screen.ICE_CREAM_FLAVORS);
-        //newIceCream = flavorCreationDialog.returnItem();
+        CreateFlavorJOptionPane flavorDialog = new CreateFlavorJOptionPane(Screen.ICE_CREAM_FLAVORS, this);
+        if(flavorDialog.success){
+            emporium.addIceCreamFlavor(flavorDialog.returnIceCream());
+        }
     }
 
     protected void onMixInCreateClick(){
-        
+        CreateFlavorJOptionPane flavorDialog = new CreateFlavorJOptionPane(Screen.MIX_IN_FLAVORS, this);
+        if(flavorDialog.success){
+            emporium.addMixInFlavor(flavorDialog.returnMixIn());
+        }
     }
 
     protected void onScoopCreateClick(){
