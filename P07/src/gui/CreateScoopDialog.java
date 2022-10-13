@@ -19,11 +19,11 @@ import emporium.Emporium;
 public class CreateScoopDialog implements CreationDialog<Scoop>{ 
     public boolean success;
 
-    @SuppressWarnings("unchecked") public CreateScoopDialog(MainWin parent, Emporium emporium){
+    public CreateScoopDialog(MainWin parent, Emporium emporium){
         this.parent = parent;
         this.emporium = emporium;
 
-        iceCreamFlavors = new JComboBox(emporium.iceCreamFlavors());
+        iceCreamFlavors = new JComboBox<Object>(emporium.iceCreamFlavors());
         mixInFlavors = new JList(emporium.mixInFlavors());
 
         creationDialog();

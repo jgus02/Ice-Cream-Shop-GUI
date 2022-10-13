@@ -106,7 +106,7 @@ public class MainWin extends JFrame{
     }
 
     // -------- File  Listeners ---------
-    protected void onSaveAsClick(){
+    /*protected void onSaveAsClick(){
         final JFileChooser fc = openSaveClickFcHelper();
         if(fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION){
             filename = fc.getSelectedFile();
@@ -156,7 +156,7 @@ public class MainWin extends JFrame{
         fc.addChooseableFileFilter(scpFiles);
         fc.setFileFilter(scpFiles);
         return fc;
-    }
+    }*/
     
     protected void onQuitClick(){
         System.exit(0);
@@ -213,9 +213,46 @@ public class MainWin extends JFrame{
     }
 
     private void view(Screen screen){
-        StringBuilder displayBuilder = new StringBuilder("<HTML><b>");
+        Object[] arr = {};
         int i = 1;
-        Object[] flavors = {};
+        StringBuilder displayBuilder = new StringBuilder("<HTML><b>");
+
+        switch(screen){
+            case ICE_CREAM_FLAVORS:
+                displayBuilder.append("ICE CREAM FLAVORS");
+                arr = emporium.iceCreamFlavors();
+                break;
+            case MIX_IN_FLAVORS:
+                displayBuilder.append("MIX-IN FLAVORS");
+                arr = emporium.mixInFlavors();
+                break;
+            case SCOOPS:
+                displayBuilder.append("SCOOPS");
+                arr = emporium.scoops();
+                break;
+            default:
+                throw new IllegalArgumentException("View must contain value from screen enum.");
+        }
+
+        displayBuilder.append("</b><br><br>");
+
+        if(screen == Screen.SCOOPS){
+            for(Object scoop: arr){
+                displayBuilder.append(i + ".  " + scoop.toString() + "<br>");
+                i++;
+            }
+        } else {
+            for(Object flavor: arr){
+                displayBuilder.append(i + ".  $" + ((Item)flavor).price() + " " + ((Item)flavor).name() + " - " + ((Item)flavor).description() + "<br>");
+                i++;
+            }
+        }
+        displayBuilder.append("</HTML>");
+        display.setText(displayBuilder.toString());
+    }
+
+
+        
         /*switch(screen){
             case SCOOPS:
                 displayBuilder.append("SCOOPS</b><br><br>");
@@ -248,7 +285,7 @@ public class MainWin extends JFrame{
                 
         }*/
 
-        switch(screen){
+/*         switch(screen){
             case SCOOPS:    //Case SCOOPS leaves method before exiting switch statement.
                 displayBuilder.append("SCOOPS</b><br><br>");
                 for(Object scoop: emporium.scoops()){
@@ -275,9 +312,10 @@ public class MainWin extends JFrame{
             displayBuilder.append(i + ".  $" + ((Item)flavor).price() + " " + ((Item)flavor).name() + " - " + ((Item)flavor).description() + "<br>");
             i++;
         }
+        
         displayBuilder.append("</HTML>");
         display.setText(displayBuilder.toString());
-    }
+    }*/
 
     private String FILE_VER = "1.0";
     private String MAGIC_COOKIE = "SCOOP🍦";
