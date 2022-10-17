@@ -23,13 +23,13 @@ public class CreateScoopDialog implements CreationDialog<Scoop>{
         this.parent = parent;
         this.emporium = emporium;
 
-        iceCreamFlavors = new JComboBox<Object>(emporium.iceCreamFlavors());
+        iceCreamFlavors = new JComboBox(emporium.iceCreamFlavors());
         mixInFlavors = new JList(emporium.mixInFlavors());
 
         creationDialog();
     }
 
-    @SuppressWarnings("unchecked") public void creationDialog(){ //TODO: remake as horizontal orientation?
+    public void creationDialog(){ //TODO: remake as horizontal orientation?
         JLabel iceCreamFlavor = new JLabel("Ice Cream Flavor");
         JLabel mixInFlavor = new JLabel("Mix-Ins");
 
@@ -108,26 +108,22 @@ public class CreateScoopDialog implements CreationDialog<Scoop>{
     public Scoop getChoice(){
         IceCreamFlavor flavor = (IceCreamFlavor)(iceCreamFlavors.getModel().getSelectedItem());
         Scoop scoop = new Scoop(flavor);
-        if(selectedMixIns.size() > 0)
-        {
-            MixIn temp = null;
-            for(int i = 0; i < (selectedMixIns.size()); i++){
-                temp = new MixIn(selectedMixIns.get(i), (MixInAmount)(mixInSpinnerTracker.get(i*2+1).getValue()));
-                scoop.addMixin(temp);
+
+        if(!mixInFlavors.isSelectionEmpty()){
+            int i = 1;
+            for(MixInFlavor currMixIn: new ArrayList<MixInFlavor>(mixInFlavors.getSelectedValuesList())){ 
+                scoop.addMixin(new MixIn(currMixIn, 
+                    (MixInAmount)(((JSpinner)mixInAmountTracker.get(i)).getModel().getValue()))); //IT WORKS.
+                i+=2;                                                                         //be SCARED of touching this
             }
         }
+
         return scoop;
     }
 
-    private boolean showMixInChoices;
-
     private JComboBox iceCreamFlavors;
     private JList mixInFlavors;
-    private JSpinner mixInAmounts;
-    private ArrayList<Object> mixInAmountTracker;
-    private ArrayList<JSpinner> mixInSpinnerTracker;
-    private ArrayList<JLabel> mixInJLabelTracker;
-    private ArrayList<MixInFlavor> selectedMixIns;
+    private ArrayList mixInAmountTracker;
 
     private MainWin parent;
     private Emporium emporium;
