@@ -13,8 +13,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
-
 /*import java.awt.Font;
 import java.awt.Color;
 
@@ -43,7 +41,7 @@ import emporium.Emporium;
 
 public class MainWin extends JFrame{
     
-    public MainWin(String titleBar){
+    public MainWin(String titleBar) throws IOException {
         super(titleBar); 
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //"It is recommended you only use this in
@@ -56,8 +54,17 @@ public class MainWin extends JFrame{
         JMenuBar menuBar = new JMenuBar();
 
         JMenu     file           = new JMenu    ("File"); 
+        JMenuItem save           = new JMenuItem("Save");
+        JMenuItem saveAs         = new JMenuItem("Save As...");
+        JMenuItem open           = new JMenuItem("Open");
         JMenuItem quit           = new JMenuItem("Quit");
+        save          .addActionListener(event -> onSaveClick());
+        saveAs        .addActionListener(event -> onSaveAsClick());
+        open          .addActionListener(event -> onOpenClick());
         quit          .addActionListener(event -> onQuitClick());
+        file   .add(save);
+        file   .add(saveAs);
+        file   .add(open);
         file   .add(quit);
 
         JMenu     view           = new JMenu    ("View");
@@ -106,57 +113,66 @@ public class MainWin extends JFrame{
     }
 
     // -------- File  Listeners ---------
-    /*protected void onSaveAsClick(){
-        final JFileChooser fc = openSaveClickFcHelper();
-        if(fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION){
-            filename = fc.getSelectedFile();
-            if(!filename.getAbsolutePath().endsWith(".scp")){
-                filename = new File(filename.getAbsolutePath() + ".scp");
-            }
-            onSaveClick();
+    protected void onSaveClick() {
+        try(BufferedWriter bw = new BufferedWriter(new FileWriter(filename))){
+            bw.write(MAGIC_COOKIE + "\n");
+            bw.write(FILE_VER + "\n");
+            emporium.save(bw);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Could not open " + filename + ":\n" +
+                    e, "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    protected void onSaveClick(){
-        try(BufferedWriter bw = new BufferedWriter(new FileWriter(filename))){
-            bw.write(MAGIC_COOKIE + '\n');
-            bw.write(FILE_VER + '\n');
-            emporium.save(bw);
+    protected void onSaveAsClick(){
+        try{
+            final JFileChooser fc = initializeFileChooser();
+            if(fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION){
+                filename = fc.getSelectedFile();
+                if(!filename.getAbsolutePath().endsWith(".scp")){
+                    filename = new File(filename.getAbsolutePath() + ".scp");
+                }
+                onSaveClick();
+            }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error: Could not open " + filename + '\n' + 
-            e, "Failed", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this,
+                    "Could not open " + filename + ":\n" +
+                    e, "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     protected void onOpenClick(){
-        final JFileChooser fc = openSaveClickFcHelper();
+        final JFileChooser fc = initializeFileChooser();
         if(fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
             filename = fc.getSelectedFile();
-
-            try(BufferedReader br = new BufferedReader(new FileReader(filename))){
-                if(!(br.readLine()).equals(MAGIC_COOKIE)){
-                    throw new RuntimeException("Not a MICE file.");
-                }
-                if(!(br.readLine()).equals(FILE_VER)){
-                    throw new RuntimeException("Incompatible MICE file format.");
-                }
-
-                emporium = new Emporium(br);
-                if (emporium.iceCreamFlavors().size != 0){
-                    this.getJMenuBar().getMenu(2).getItem(2).setEnabled(true);
-
-                }
+            try(BufferedReader br = new BufferedReader(new FileReader(filename))) {
+            if(!(br.readLine()).equals(MAGIC_COOKIE)){
+                throw new RuntimeException("Not a MICE file.");
             }
+            if(!(br.readLine()).equals(FILE_VER)){
+                throw new RuntimeException("Incompatible MICE file format.");
+            }
+               emporium = new Emporium(br);
+            if (emporium.iceCreamFlavors().length != 0){
+                this.getJMenuBar().getMenu(2).getItem(2).setEnabled(true);
+            }
+
+        } catch (Exception e){
+            JOptionPane.showMessageDialog(this,
+                "Could not open " + filename + ":\n" +
+                e, "Error", JOptionPane.ERROR_MESSAGE);
+        } 
         }
     }
 
-    private JFileChooser openSaveClickFcHelper(){ //not a listener
-        FileChooser fc = new JFileChooser(filename);
+    private JFileChooser initializeFileChooser(){ //not a listener
+        JFileChooser fc = new JFileChooser(filename);
         FileFilter scpFiles = new FileNameExtensionFilter("Scoop files", "scp");
-        fc.addChooseableFileFilter(scpFiles);
+        fc.addChoosableFileFilter(scpFiles);
         fc.setFileFilter(scpFiles);
         return fc;
-    }*/
+    }
     
     protected void onQuitClick(){
         System.exit(0);
@@ -205,11 +221,11 @@ public class MainWin extends JFrame{
     //
     // --------- Help Listeners -------------
     protected void onAboutClick(){
-    JOptionPane.showMessageDialog(null, 
-                    "Ice Cream Emporium\n\nCopyright 2022 Jasper Gustafson" + 
-                    " - Licensed under Gnu GPL 3.0\n\n" + 
-                    "Create ice cream and topping flavors and order them as servings of ice cream"
-    );
+        JOptionPane.showMessageDialog(null, 
+                        "Ice Cream Emporium\n\nCopyright 2022 Jasper Gustafson" + 
+                        " - Licensed under Gnu GPL 3.0\n\n" + 
+                        "Create ice cream and topping flavors and order them as servings of ice cream"
+        );
     }
 
     private void view(Screen screen){
@@ -243,79 +259,17 @@ public class MainWin extends JFrame{
             }
         } else {
             for(Object flavor: arr){
-                displayBuilder.append(i + ".  $" + ((Item)flavor).price() + " " + ((Item)flavor).name() + " - " + ((Item)flavor).description() + "<br>");
+                displayBuilder.append(
+                            i + ".  $" + ((Item)flavor).price() +
+                            " " + ((Item)flavor).name() + " - " +
+                            ((Item)flavor).description() + "<br>"
+                );
                 i++;
             }
         }
         displayBuilder.append("</HTML>");
         display.setText(displayBuilder.toString());
     }
-
-
-        
-        /*switch(screen){
-            case SCOOPS:
-                displayBuilder.append("SCOOPS</b><br><br>");
-                i = 1;
-                for(Object scoop: emporium.scoops()){
-                    displayBuilder.append(i + ".  " + scoop.toString() + "<br>");
-                    i++;
-                }
-                displayBuilder.append("</HTML>");
-                display.setText(displayBuilder.toString());
-            break;
-            case ICE_CREAM_FLAVORS:
-                displayBuilder.append("ICE CREAM FLAVORS</b><br><br>");
-                i = 1;
-                for(Object flavor: emporium.iceCreamFlavors()){
-                    displayBuilder.append(i + ".  $" + ((IceCreamFlavor)flavor).price() + " " + flavor.toString() + " - " + ((IceCreamFlavor)flavor).description() + "<br>");
-                    i++;
-                }
-                break;
-            case MIX_IN_FLAVORS:
-                displayBuilder.append("MIX-IN FLAVORS</b><br><br>");
-                i = 1;
-                for(Object flavor: emporium.mixInFlavors()){
-                    displayBuilder.append(i + ".  $" + ((MixInFlavor)flavor).price() + " " + flavor.toString() + " - " + ((MixInFlavor)flavor).description() + "<br>");
-                    i++;
-                }
-                break;
-
-            default:
-                
-        }*/
-
-/*         switch(screen){
-            case SCOOPS:    //Case SCOOPS leaves method before exiting switch statement.
-                displayBuilder.append("SCOOPS</b><br><br>");
-                for(Object scoop: emporium.scoops()){
-                    displayBuilder.append(i + ".  " + scoop.toString() + "<br>");
-                    i++;
-                }
-                displayBuilder.append("</HTML>");
-                display.setText(displayBuilder.toString());
-                return;     //exits here
-
-            case ICE_CREAM_FLAVORS:
-                displayBuilder.append("ICE CREAM FLAVORS</b><br><br>");
-                flavors = emporium.iceCreamFlavors();
-                break;
-            case MIX_IN_FLAVORS:
-                displayBuilder.append("MIX-IN FLAVORS</b><br><br>");
-                flavors = emporium.mixInFlavors();  
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid screen passed to view.");
-        }
-
-        for(Object flavor: flavors){ //Cases ICE_CREAM and MIX_IN both use this display format.
-            displayBuilder.append(i + ".  $" + ((Item)flavor).price() + " " + ((Item)flavor).name() + " - " + ((Item)flavor).description() + "<br>");
-            i++;
-        }
-        
-        displayBuilder.append("</HTML>");
-        display.setText(displayBuilder.toString());
-    }*/
 
     private String FILE_VER = "1.0";
     private String MAGIC_COOKIE = "SCOOP🍦";

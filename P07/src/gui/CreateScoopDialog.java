@@ -30,21 +30,18 @@ public class CreateScoopDialog implements CreationDialog<Scoop>{
     }
 
     @SuppressWarnings("unchecked") public void creationDialog(){ //TODO: remake as horizontal orientation?
-        showMixInChoices = (emporium.mixInFlavors().length == 0) ? false : true; 
-
         JLabel iceCreamFlavor = new JLabel("Ice Cream Flavor");
         JLabel mixInFlavor = new JLabel("Mix-Ins");
-        
-        Object[] objects = {iceCreamFlavor,
-                            iceCreamFlavors
-        };
 
-        if(showMixInChoices){
-            Object[] showMixIns = {
-                iceCreamFlavor, iceCreamFlavors,
-                mixInFlavor,    mixInFlavors
-            };
-            objects = showMixIns;
+        Object[] objects = null;
+        if(emporium.mixInFlavors().length > 0){
+            Object[] tmp = {iceCreamFlavor, iceCreamFlavors,
+                            mixInFlavor,    mixInFlavors};
+            objects = tmp;
+        }
+        else{
+            Object[] tmp = {iceCreamFlavor, iceCreamFlavors};
+            objects = tmp;
         }
 
         int button = JOptionPane.showConfirmDialog(
@@ -56,7 +53,7 @@ public class CreateScoopDialog implements CreationDialog<Scoop>{
         );
 
 
-        if((button == JOptionPane.OK_OPTION) && !(mixInFlavors.isSelectionEmpty() || !showMixInChoices)){
+        if((button == JOptionPane.OK_OPTION) && !mixInFlavors.isSelectionEmpty()){
             //occurs when no mix ins are selected OR no mix ins have been created
             getMixInAmounts();
         }
@@ -66,20 +63,15 @@ public class CreateScoopDialog implements CreationDialog<Scoop>{
     }
 
     @SuppressWarnings("unchecked") private void getMixInAmounts(){
-        selectedMixIns = new ArrayList<>(mixInFlavors.getSelectedValuesList());
-        mixInSpinnerTracker = new ArrayList<>();
-        mixInJLabelTracker = new ArrayList<>();
-
-        for(MixInFlavor currMixIn: selectedMixIns){
-            for(int i = 0; i<(selectedMixIns.size()); i++){
-                mixInSpinnerTracker.add(new JSpinner(new SpinnerListModel(MixInAmount.values())));
-                mixInJLabelTracker.add(new JLabel(currMixIn.name()));
-            }
+        mixInAmountTracker = new ArrayList<>();
+        for(MixInFlavor currMixIn: new ArrayList<MixInFlavor>(mixInFlavors.getSelectedValuesList())){
+            mixInAmountTracker.add(new JLabel(currMixIn.name()));
+            mixInAmountTracker.add(new JSpinner(new SpinnerListModel(MixInAmount.values())));
         }
 
         int button = JOptionPane.showConfirmDialog(
             parent,
-            mixInSpinnerTracker.toArray(),
+            mixInAmountTracker.toArray(),
             ("Select Amount"),
             JOptionPane.OK_CANCEL_OPTION,
             JOptionPane.QUESTION_MESSAGE
@@ -113,54 +105,14 @@ public class CreateScoopDialog implements CreationDialog<Scoop>{
         }
     }
 
-    /*public void confirmChoice(Object[] mixInSpinnerTracker, ArrayList<MixInFlavor> selectedMixIns){
-        ArrayList<Object> choices = new ArrayList<>({ 
-            "Confirm Scoop?",
-            "Flavor: " + iceCreamFlavors.getModel().getSelectedItem().toString(),
-            "Mix-Ins" 
-        };
-
-        Object[] mixInChoiceData = new Object[(selectedMixIns.size())*2];
-
-        for(MixInFlavor currMixIn: selectedMixIns){
-            for(int i = 0; i<(selectedMixIns.size()*2); i+=2){
-                mixInSpinnerTracker[i]   = new JLabel(currMixIn.name());
-                mixInSpinnerTracker[i+1] = new JSpinner(new SpinnerListModel(MixInAmount.values()));
-            }
-        }
-
-                for(MixInFlavor currMixIn: selectedMixIns){
-            for(int i = 0; i<(selectedMixIns.size()*2); i+=2){
-                mixInSpinnerTracker[i]   = new JLabel(currMixIn.name());
-                mixInSpinnerTracker[i+1] = new JSpinner(new SpinnerListModel(MixInAmount.values()));
-            }
-        }
-
-        choices.addAll(objects);
-
-        int button = JOptionPane.showConfirmDialog(
-            parent,
-            choices.toArray(),
-            ("Confirm " + identifier + "?"),
-            JOptionPane.YES_NO_OPTION
-        );
-
-        if(button == JOptionPane.NO_OPTION){
-            creationDialog();
-        }
-        else{
-            success = true;
-        }
-    }*/
-    
     public Scoop getChoice(){
         IceCreamFlavor flavor = (IceCreamFlavor)(iceCreamFlavors.getModel().getSelectedItem());
         Scoop scoop = new Scoop(flavor);
-        if(showMixInChoices)
+        if(selectedMixIns.size() > 0)
         {
             MixIn temp = null;
             for(int i = 0; i < (selectedMixIns.size()); i++){
-                temp = new MixIn(selectedMixIns.get(i), (MixInAmount)(mixInSpinnerTracker.get(i).getValue()));
+                temp = new MixIn(selectedMixIns.get(i), (MixInAmount)(mixInSpinnerTracker.get(i*2+1).getValue()));
                 scoop.addMixin(temp);
             }
         }
@@ -172,6 +124,7 @@ public class CreateScoopDialog implements CreationDialog<Scoop>{
     private JComboBox iceCreamFlavors;
     private JList mixInFlavors;
     private JSpinner mixInAmounts;
+    private ArrayList<Object> mixInAmountTracker;
     private ArrayList<JSpinner> mixInSpinnerTracker;
     private ArrayList<JLabel> mixInJLabelTracker;
     private ArrayList<MixInFlavor> selectedMixIns;

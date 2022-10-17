@@ -1,8 +1,6 @@
 package product;
 
-import java.io.File;
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -29,8 +27,8 @@ public abstract class Item{
 
         this.name           = values[0];
         this.description    = values[1];
-        this.cost           = Integer.parseInt(values[3]);
-        this.price          = Integer.parseInt(values[4]);
+        this.cost           = Integer.parseInt(values[2]);
+        this.price          = Integer.parseInt(values[3]);
     }
 
     public void save(BufferedWriter bw) throws IOException{
@@ -38,7 +36,7 @@ public abstract class Item{
                 name + "," + 
                 description + "," + 
                 cost + "," + 
-                price + '\n'
+                price + "\n"
         );
     }
 

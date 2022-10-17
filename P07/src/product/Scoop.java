@@ -1,15 +1,31 @@
 package product;
 import java.util.ArrayList;
 
-public class Scoop{
-    private IceCreamFlavor flavor;
-    private ArrayList<MixIn> mixins; //arraylist or array?
+import java.io.BufferedReader;
+import java.io.BufferedWriter;;
+import java.io.IOException;
+import java.lang.Integer;
 
+public class Scoop{
     public Scoop(IceCreamFlavor flavor){
-        this.flavor = flavor;
-        mixins = new ArrayList<MixIn>();
+        this.flavor = flavor;   
     } 
 
+    public Scoop(BufferedReader br) throws IOException {
+        this.flavor = new IceCreamFlavor(br);
+        int numMixins = Integer.parseInt(br.readLine());
+        for(int i = 0;i < numMixins; i++){
+            addMixin(new MixIn(br));
+        }
+    }
+
+    public void save(BufferedWriter bw) throws IOException{
+        flavor.save(bw);
+        bw.write("" + mixins.size() + '\n');
+        for(MixIn mix : mixins){
+            mix.save(bw);
+        }
+    }
     public void addMixin(MixIn mixin){
         mixins.add(mixin);
     }
@@ -28,4 +44,7 @@ public class Scoop{
 
         return flavor.name() +" with"+ mixinList.toString(); 
     }
+
+    private IceCreamFlavor flavor;
+    private ArrayList<MixIn> mixins = new ArrayList<MixIn>();
 }

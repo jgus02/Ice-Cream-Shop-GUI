@@ -22,13 +22,9 @@ public abstract class CreateFlavorDialog<T> implements CreationDialog<T>{
     }
 
     public abstract T getChoice();
-
-    protected int spinnerToInt(JSpinner spinner){ //i hate java
-        return ((SpinnerNumberModel)spinner.getModel()).getNumber().intValue();
-    }
-
+    
     public void creationDialog(){
-        JLabel name        = new JLabel("Name");                                        
+        JLabel name        = new JLabel("Name");
         JLabel description = new JLabel("<HTML><br/>Description</HTML>");
         JLabel price       = new JLabel("<HTML><br/>Price</HTML>");
         JLabel cost        = new JLabel("<HTML><br/>Cost</HTML>");
@@ -53,11 +49,6 @@ public abstract class CreateFlavorDialog<T> implements CreationDialog<T>{
         }
     }
 
-    /*private boolean validData(){
-        //if(prices.getValue() < costs.getValue()
-        return 1;
-    }*/
-
     public void confirmChoice(){
         Object[] choices = {
             "Confirm " + identifier + "?",
@@ -80,6 +71,10 @@ public abstract class CreateFlavorDialog<T> implements CreationDialog<T>{
             success = true;
         }
     }
+    protected int spinnerToInt(JSpinner spinner){ //i hate java
+        return ((SpinnerNumberModel)spinner.getModel()).getNumber().intValue();
+    }
+    
     private String identifier;
     private MainWin parent;
     
