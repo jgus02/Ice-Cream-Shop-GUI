@@ -23,8 +23,8 @@ public class CreateScoopDialog implements CreationDialog<Scoop>{
         this.parent = parent;
         this.emporium = emporium;
 
-        iceCreamFlavors = new JComboBox(emporium.iceCreamFlavors());
-        mixInFlavors = new JList(emporium.mixInFlavors());
+        iceCreamFlavors = new JComboBox(emporium.icf());
+        mixInFlavors = new JList(emporium.mxf());
 
         creationDialog();
     }
@@ -34,7 +34,7 @@ public class CreateScoopDialog implements CreationDialog<Scoop>{
         JLabel mixInFlavor = new JLabel("Mix-Ins");
 
         Object[] objects = null;
-        if(emporium.mixInFlavors().length > 0){
+        if(emporium.mxf().length > 0){
             Object[] tmp = {iceCreamFlavor, iceCreamFlavors,
                             mixInFlavor,    mixInFlavors};
             objects = tmp;
