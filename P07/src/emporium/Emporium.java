@@ -19,60 +19,60 @@ public class Emporium{
         int arrSize = Integer.parseInt(br.readLine());
         int i;
         for(i = 0;i < arrSize; i++){
-            iceCreamFlavors.add(new IceCreamFlavor(br));
+            icf.add(new IceCreamFlavor(br));
         }
 
         arrSize = Integer.parseInt(br.readLine());
         for(i = 0;i < arrSize; i++){
-            mixInFlavors.add(new MixInFlavor(br));
+            mxf.add(new MixInFlavor(br));
         }
 
         arrSize = Integer.parseInt(br.readLine());
         for(i = 0;i < arrSize; i++){
-            scoops.add(new Scoop(br));
+            scp.add(new Scoop(br));
         }
     }
 
     public void save(BufferedWriter bw) throws IOException{
-        bw.write("" + iceCreamFlavors.size() + "\n");
-        for(IceCreamFlavor flavor:iceCreamFlavors){
+        bw.write("" + icf.size() + "\n");
+        for(IceCreamFlavor flavor:icf){
             flavor.save(bw);
         }
         
-        bw.write("" + mixInFlavors.size() + '\n');
-        for(MixInFlavor flavor : mixInFlavors){
+        bw.write("" + mxf.size() + '\n');
+        for(MixInFlavor flavor : mxf){
             flavor.save(bw);
         }
 
-        bw.write("" + scoops.size() + '\n');
-        for(Scoop scoop : scoops){
+        bw.write("" + scp.size() + '\n');
+        for(Scoop scoop : scp){
             scoop.save(bw);
         }
 
 
     }
     
-    public void addIceCreamFlavor(IceCreamFlavor flavor){
-        iceCreamFlavors.add(flavor);
+    public void addIcf(IceCreamFlavor flavor){
+        icf.add(flavor);
     }
-    public void addMixInFlavor(MixInFlavor flavor){
-        mixInFlavors.add(flavor);
+    public void addMxf(MixInFlavor flavor){
+        mxf.add(flavor);
     }
-    public void addScoop(Scoop scoop){
-        scoops.add(scoop);
+    public void addScp(Scoop scoop){
+        scp.add(scoop);
     }
     
-    public Object[] iceCreamFlavors(){
-        return iceCreamFlavors.toArray();
+    public Object[] icf(){
+        return icf.toArray();
     }
-    public Object[] mixInFlavors(){
-        return mixInFlavors.toArray();
+    public Object[] mxf(){
+        return mxf.toArray();
     }
-    public Object[] scoops(){
-        return scoops.toArray();
+    public Object[] scp(){
+        return scp.toArray();
     }
 
-    private ArrayList<IceCreamFlavor> iceCreamFlavors = new ArrayList<>();
-    private ArrayList<MixInFlavor> mixInFlavors = new ArrayList<>();
-    private ArrayList<Scoop> scoops = new ArrayList<>();
+    private ArrayList<IceCreamFlavor> icf = new ArrayList<>();
+    private ArrayList<MixInFlavor> mxf = new ArrayList<>();
+    private ArrayList<Scoop> scp = new ArrayList<>();
 }
