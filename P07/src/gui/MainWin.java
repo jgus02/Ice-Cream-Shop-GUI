@@ -142,7 +142,7 @@ public class MainWin extends JFrame{
         scpViewB   .setToolTipText("View scoops");
         icfViewB   .addActionListener(event -> onIcfViewClick());
         mxfViewB   .addActionListener(event -> onMxfViewClick());
-        scpViewB  .addActionListener(event -> onScpViewClick());
+        scpViewB   .addActionListener(event -> onScpViewClick());
         toolbar.add(icfViewB);
         toolbar.add(mxfViewB);
         toolbar.add(scpViewB);
@@ -160,7 +160,8 @@ public class MainWin extends JFrame{
         JButton scpCreateB  
             = new JButton(new ImageIcon(getClass().getResource("resources/scpCreate.png")));
         scpCreateB .setActionCommand("Create new scoop");
-        scpCreateB .setToolTipText("Create new scoop");
+        scpCreateB .setToolTipText("Create a flavor first!");
+        scpCreateB.setEnabled(false);
         icfCreateB .addActionListener(event -> onIcfCreateClick());
         mxfCreateB .addActionListener(event -> onMxfCreateClick());
         scpCreateB .addActionListener(event -> onScpCreateClick());
@@ -168,6 +169,9 @@ public class MainWin extends JFrame{
         toolbar.add(mxfCreateB);
         toolbar.add(scpCreateB);
         
+        JComponent[] tmp = {scpCreate, scpCreateB};
+        scpButtons = tmp;
+
         getContentPane().add(toolbar, BorderLayout.PAGE_START);
 
         setVisible(true);
@@ -212,22 +216,19 @@ public class MainWin extends JFrame{
         if(fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
             filename = fc.getSelectedFile();
             try(BufferedReader br = new BufferedReader(new FileReader(filename))) {
-            if(!(br.readLine()).equals(MAGIC_COOKIE)){
-                throw new RuntimeException("Not a MICE file.");
+                if(!(br.readLine()).equals(MAGIC_COOKIE)){
+                    throw new RuntimeException("Not a MICE file.");
+                }
+                if(!(br.readLine()).equals(FILE_VER)){
+                    throw new RuntimeException("Incompatible MICE file format.");
+                }
+                emporium = new Emporium(br);
+                updateOnCreation(Screen.ICE_CREAM_FLAVORS);
+            } catch (Exception e){
+                JOptionPane.showMessageDialog(this,
+                    "Could not open " + filename + ":\n" +
+                    e, "Error", JOptionPane.ERROR_MESSAGE);
             }
-            if(!(br.readLine()).equals(FILE_VER)){
-                throw new RuntimeException("Incompatible MICE file format.");
-            }
-               emporium = new Emporium(br);
-            if (emporium.icf().length != 0){
-                this.getJMenuBar().getMenu(2).getItem(2).setEnabled(true);
-            }
-
-        } catch (Exception e){
-            JOptionPane.showMessageDialog(this,
-                "Could not open " + filename + ":\n" +
-                e, "Error", JOptionPane.ERROR_MESSAGE);
-        } 
         }
     }
 
@@ -261,13 +262,8 @@ public class MainWin extends JFrame{
     protected void onIcfCreateClick(){
         CreateIceCreamDialog flavorDialog = new CreateIceCreamDialog(this);
         if(flavorDialog.success){
-            JMenuItem tempScpCreate = this.getJMenuBar().getMenu(2).getItem(2);
-            if(!tempScpCreate.isEnabled()){
-                tempScpCreate.setToolTipText(null);
-                tempScpCreate.setEnabled(true);
-            }
             emporium.addIcf(flavorDialog.getChoice());
-            updateDisplayOnCreation(Screen.ICE_CREAM_FLAVORS);
+            updateOnCreation(Screen.ICE_CREAM_FLAVORS);
         }
     }
 
@@ -275,7 +271,7 @@ public class MainWin extends JFrame{
         CreateMixInDialog flavorDialog = new CreateMixInDialog(this);
         if(flavorDialog.success){
             emporium.addMxf(flavorDialog.getChoice());
-            updateDisplayOnCreation(Screen.MIX_IN_FLAVORS);
+            updateOnCreation(Screen.MIX_IN_FLAVORS);
         }
     }
 
@@ -283,14 +279,15 @@ public class MainWin extends JFrame{
         CreateScoopDialog scoopDialog = new CreateScoopDialog(this, this.emporium);
         if(scoopDialog.success){
             emporium.addScp(scoopDialog.getChoice());
-            updateDisplayOnCreation(Screen.SCOOPS);
+            updateOnCreation(Screen.SCOOPS);
         }
     }
     
-    private void updateDisplayOnCreation(Screen screen){ //this seems over-engineered
+    private void updateOnCreation(Screen screen){ //this seems over-engineered
         char tmp;                                      //also if I change view's text 
         switch(screen){                                //I'll have to change this
             case ICE_CREAM_FLAVORS:
+                enableScoopIfFlavor();
                 tmp = 'I';
                 break;
             case MIX_IN_FLAVORS:
@@ -358,13 +355,25 @@ public class MainWin extends JFrame{
     }
 
     // ------------------------------
+    private void enableScoopIfFlavor(){
+        boolean enable = false;
+        String toolTipMsg = "Create a flavor first!";
+        if (emporium.icf().length != 0){
+            enable = true;
+            toolTipMsg = "Create new scoop";
+        }
+        for(int i = 0;i<2;i++){
+            scpButtons[i].setEnabled(enable);
+            scpButtons[i].setToolTipText(toolTipMsg);
+        }
+
+
+    }
 
     private String FILE_VER = "1.0";
     private String MAGIC_COOKIE = "SCOOP🍦";
     private File filename;
-
-    protected String VERSION = "1.3";
-
+    private JComponent[] scpButtons = null;
     private Emporium emporium;
     private JLabel display;
 }
