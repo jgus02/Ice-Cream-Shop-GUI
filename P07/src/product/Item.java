@@ -40,21 +40,6 @@ public abstract class Item{
         );
     }
 
-    private void dataValidation(String name, String description, int cost, int price){
-        if(name.isEmpty()){
-            throw new IllegalIceCreamException("Field \"name\" cannot be empty.\n");
-        }
-        if(description.isEmpty()){
-            throw new IllegalIceCreamException("Field \"description\" cannot be empty.\n");
-        }
-        if(cost < 0){
-            throw new IllegalIceCreamException("Cost cannot be negative.\n");
-        }
-        if((price < cost)){
-            throw new IllegalIceCreamException("Price cannot be less than cost.\n");
-        }
-    }
-
     public String name(){
         return name; 
     }
@@ -79,6 +64,21 @@ public abstract class Item{
     public class IllegalIceCreamException extends IllegalArgumentException{
         public IllegalIceCreamException(String message){
             super(message);
+        }
+    }
+
+    private void dataValidation(String name, String description, int cost, int price){
+        if(name.isEmpty()){
+            throw new IllegalIceCreamException("Field \"name\" cannot be empty.\n");
+        }
+        if(description.isEmpty()){
+            throw new IllegalIceCreamException("Field \"description\" cannot be empty.\n");
+        }
+        if(cost < 0){
+            throw new IllegalIceCreamException("Cost cannot be negative.\n");
+        }
+        if((price < cost)){
+            throw new IllegalIceCreamException("Price cannot be less than cost.\n");
         }
     }
 

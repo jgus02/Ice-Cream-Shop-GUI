@@ -45,6 +45,6 @@ public class Logo extends JPanel{
                 gfx.drawLine(15+i*50,0,15+i*50,95);
             }
             gfx.drawImage(logo,10,5,null);
-            gfx.drawString("Jasper Gustafson", 50, 100);
+            gfx.drawString("mm ice ceam :)", 50, 100);
         }
 }
