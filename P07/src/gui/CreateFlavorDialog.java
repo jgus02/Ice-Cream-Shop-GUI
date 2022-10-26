@@ -5,14 +5,13 @@ import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JOptionPane;
+import javax.swing.ImageIcon;
 
 import product.Item;
 
-public abstract class CreateFlavorDialog<T> implements CreationDialog<T>{ 
-    public boolean success;                      
-
-    protected CreateFlavorDialog(MainWin parent, String identifier){
-        this.identifier = identifier;
+public abstract class CreateFlavorDialog<T> extends CreationDialog<T>{
+    protected CreateFlavorDialog(MainWin parent, String type){
+        super(parent,type);
 
         this.names        = new JTextField(30);  
         this.descriptions = new JTextField(30);
@@ -39,44 +38,24 @@ public abstract class CreateFlavorDialog<T> implements CreationDialog<T>{
         int button = JOptionPane.showConfirmDialog(
             parent,
             objects,
-            ("New " + identifier),
+            ("New " + type),
             JOptionPane.OK_CANCEL_OPTION,
-            JOptionPane.QUESTION_MESSAGE
+            JOptionPane.QUESTION_MESSAGE,
+            new ImageIcon(getClass().getResource("resources/" + type + ".png"))
         );
 
         if((button == JOptionPane.OK_OPTION)){
-            confirmChoice();
+            Object[] choices = {"Flavor: " + names.getText(),
+                                "Description: " + descriptions.getText(),
+                                "Price: " + spinnerToInt(prices),
+                                "Cost: " + spinnerToInt(costs)};
+            super.confirmChoice(choices);
         }
     }
 
-    public void confirmChoice(){
-        Object[] choices = {
-            "Confirm " + identifier + "?",
-            "Flavor: " + names.getText(),
-            "Description: " + descriptions.getText(),
-            "Price: " + spinnerToInt(prices),
-            "Cost: " + spinnerToInt(costs)
-            };
-        int button = JOptionPane.showConfirmDialog(
-            parent,
-            choices,
-            ("Confirm " + identifier + "?"),
-            JOptionPane.YES_NO_OPTION
-        );
-
-        if(button == JOptionPane.NO_OPTION){
-            creationDialog();
-        }
-        else{
-            success = true;
-        }
-    }
     protected int spinnerToInt(JSpinner spinner){ //i hate java
         return ((SpinnerNumberModel)spinner.getModel()).getNumber().intValue();
     }
-    
-    private String identifier;
-    private MainWin parent;
     
     protected JTextField names;
     protected JTextField descriptions;

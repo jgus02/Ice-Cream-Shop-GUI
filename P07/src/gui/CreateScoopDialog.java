@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JComboBox;
 import java.util.ArrayList;
 import java.util.Arrays;
+import javax.swing.ImageIcon;
 
 import product.Scoop;
 import product.MixInAmount;
@@ -16,11 +17,9 @@ import product.MixIn;
 import product.IceCreamFlavor;
 import emporium.Emporium;
 
-public class CreateScoopDialog implements CreationDialog<Scoop>{ 
-    public boolean success;
-
+public class CreateScoopDialog extends CreationDialog<Scoop>{ 
     public CreateScoopDialog(MainWin parent, Emporium emporium){
-        this.parent = parent;
+        super(parent, "Scoop");
         this.emporium = emporium;
 
         iceCreamFlavors = new JComboBox(emporium.icf());
@@ -34,22 +33,23 @@ public class CreateScoopDialog implements CreationDialog<Scoop>{
         JLabel mixInFlavor = new JLabel("Mix-Ins");
 
         Object[] objects = null;
-        if(emporium.mxf().length > 0){
+        if(emporium.mxf().length > 0){ //OCCURS WHEN mix-ins are available
             Object[] tmp = {iceCreamFlavor, iceCreamFlavors,
                             mixInFlavor,    mixInFlavors};
             objects = tmp;
         }
-        else{
+        else{ //...no mix-ins available
             Object[] tmp = {iceCreamFlavor, iceCreamFlavors};
             objects = tmp;
         }
 
         int button = JOptionPane.showConfirmDialog(
-            parent,
+            super.parent,
             objects,
             ("New Scoop"),
             JOptionPane.OK_CANCEL_OPTION,
-            JOptionPane.QUESTION_MESSAGE
+            JOptionPane.QUESTION_MESSAGE,
+            new ImageIcon(getClass().getResource("resources/scp.png"))
         );
 
 
@@ -58,7 +58,8 @@ public class CreateScoopDialog implements CreationDialog<Scoop>{
             getMixInAmounts();
         }
         else if(button == JOptionPane.OK_OPTION){
-            confirmChoice();
+            Object[] choices = {"Flavor: " + iceCreamFlavors.getModel().getSelectedItem().toString()};
+            super.confirmChoice(choices);
         }
     }
 
@@ -70,38 +71,19 @@ public class CreateScoopDialog implements CreationDialog<Scoop>{
         }
 
         int button = JOptionPane.showConfirmDialog(
-            parent,
+            super.parent,
             mixInAmountTracker.toArray(),
             ("Select Amount"),
             JOptionPane.OK_CANCEL_OPTION,
-            JOptionPane.QUESTION_MESSAGE
+            JOptionPane.QUESTION_MESSAGE,
+            new ImageIcon(getClass().getResource("resources/Mix-In Flavor.png"))
         );
 
         if(button == JOptionPane.OK_OPTION){
-            success = true; //TODO: make confirmation dialog for MixInAmounts
+            super.success = true; //TODO: make confirmation dialog for MixInAmounts
         }
         else{
             creationDialog();
-        }
-    }
-
-    public void confirmChoice(){
-        Object[] choices = { 
-            "Confirm Scoop?",
-            "Flavor: " + iceCreamFlavors.getModel().getSelectedItem().toString(),
-            };
-        int button = JOptionPane.showConfirmDialog(
-            parent,
-            choices,
-            ("Confirm"),
-            JOptionPane.YES_NO_OPTION
-        );
-
-        if(button == JOptionPane.NO_OPTION){
-            creationDialog();
-        }
-        else{
-            success = true;
         }
     }
 
@@ -113,8 +95,8 @@ public class CreateScoopDialog implements CreationDialog<Scoop>{
             int i = 1;
             for(MixInFlavor currMixIn: new ArrayList<MixInFlavor>(mixInFlavors.getSelectedValuesList())){ 
                 scoop.addMixin(new MixIn(currMixIn, 
-                    (MixInAmount)(((JSpinner)mixInAmountTracker.get(i)).getModel().getValue()))); //IT WORKS.
-                i+=2;                                                                         //be SCARED of touching this
+                    (MixInAmount)(((JSpinner)mixInAmountTracker.get(i)).getModel().getValue()))); //IT WORKS AGAIN
+                i+=2;                                                                         //OLD CODE IN GIT/1325tmp/...
             }
         }
 
@@ -124,7 +106,5 @@ public class CreateScoopDialog implements CreationDialog<Scoop>{
     private JComboBox iceCreamFlavors;
     private JList mixInFlavors;
     private ArrayList mixInAmountTracker;
-
-    private MainWin parent;
     private Emporium emporium;
 }
