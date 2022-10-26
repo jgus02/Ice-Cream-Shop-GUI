@@ -5,7 +5,7 @@ import product.Item;
 
 public abstract class CreationDialog<T>{ 
 
-    public boolean success = true;
+    public boolean success;
     protected String type;
     protected MainWin parent;
 
@@ -31,8 +31,9 @@ public abstract class CreationDialog<T>{
         }
         else{
             try { 
+                success = true;
                 getChoice();
-            } catch(Item.IllegalIceCreamException e) { //why do you still throw exception. works tho
+            } catch(Item.IllegalIceCreamException e) { //still throws exception. works? though
                 int b;
                 b = JOptionPane.showConfirmDialog(
                         parent,
@@ -42,6 +43,7 @@ public abstract class CreationDialog<T>{
                         JOptionPane.ERROR_MESSAGE
                     );
                 if(b == JOptionPane.YES_OPTION){
+                    success = false;
                     creationDialog();
                 }
             }
