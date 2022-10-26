@@ -47,7 +47,10 @@ public class MainWin extends JFrame{
         setSize(640, 360);                             
         filename = new File("untitled.scp");
         emporium = new Emporium();
-        display  = new JLabel("Welcome to MICE!");
+        display  = new JLabel("<HTML><font size=+5><b>Welcome to MICE!</center></b></font></HTML>");
+        display.setVerticalAlignment(JLabel.TOP);
+        display.setHorizontalAlignment(JLabel.CENTER);
+
         //
         // ---------- M E N U   B A R ----------
         //
@@ -56,15 +59,15 @@ public class MainWin extends JFrame{
         JMenu     file          = new JMenu    ("File"); 
         JMenuItem save          = new JMenuItem("Save");
         JMenuItem saveAs        = new JMenuItem("Save As...");
-        JMenuItem load          = new JMenuItem("Load File...");
+        JMenuItem open          = new JMenuItem("Open");
         JMenuItem quit          = new JMenuItem("Quit");
         save        .addActionListener(event -> onSaveClick());
         saveAs      .addActionListener(event -> onSaveAsClick());
-        load        .addActionListener(event -> onLoadClick());
+        open        .addActionListener(event -> onOpenClick());
         quit        .addActionListener(event -> onQuitClick());
         file    .add(save);
         file    .add(saveAs);
-        file    .add(load);
+        file    .add(open);
         file    .add(quit);
 
         JMenu     view          = new JMenu    ("View");
@@ -115,16 +118,16 @@ public class MainWin extends JFrame{
             = new JButton(new ImageIcon(this.getClass().getResource("resources/saveAs.png")));
         saveAsB    .setActionCommand("Save file as...");
         saveAsB    .setToolTipText("Save file as...");
-        JButton loadB 
+        JButton openB 
             = new JButton(new ImageIcon(this.getClass().getResource("resources/load.png")));
-        loadB      .setActionCommand("Load file...");
-        loadB      .setToolTipText("Load file...");
+        openB      .setActionCommand("Open");
+        openB      .setToolTipText("Load previous save");
         saveB      .addActionListener(event -> onSaveClick());
         saveAsB    .addActionListener(event -> onSaveAsClick());
-        loadB      .addActionListener(event -> onLoadClick()); 
+        openB      .addActionListener(event -> onOpenClick()); 
         toolbar.add(saveB);
         toolbar.add(saveAsB);
-        toolbar.add(loadB);
+        toolbar.add(openB);
             
         toolbar.add(Box.createHorizontalStrut(20));   
 
@@ -211,7 +214,7 @@ public class MainWin extends JFrame{
         }
     }
 
-    protected void onLoadClick(){
+    protected void onOpenClick(){
         final JFileChooser fc = initializeFileChooser();
         if(fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
             filename = fc.getSelectedFile();
@@ -282,27 +285,6 @@ public class MainWin extends JFrame{
             updateOnCreation(Screen.SCOOPS);
         }
     }
-    
-    private void updateOnCreation(Screen screen){ //this seems over-engineered
-        char tmp;                                      //also if I change view's text 
-        switch(screen){                                //I'll have to change this
-            case ICE_CREAM_FLAVORS:
-                enableScoopIfFlavor();
-                tmp = 'I';
-                break;
-            case MIX_IN_FLAVORS:
-                tmp = 'M';
-                break;
-            case SCOOPS:
-                tmp = 'S';
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid screen.");
-        }
-            if(display.getText().charAt(9) == tmp){
-                view(screen);
-            }
-    }
 
     // ------------HELP LISTENERS-------------
     protected void onAboutClick(){
@@ -312,9 +294,11 @@ public class MainWin extends JFrame{
     //  ----------  M A I N    P A N E L  -----------
     //
     private void view(Screen screen){
+        currScreen = screen;
+
         Object[] arr = {};
-        int i = 1;
-        StringBuilder displayBuilder = new StringBuilder("<HTML><b>");
+        StringBuilder displayBuilder = new StringBuilder("<HTML><font size=+2><b>");
+        display.setHorizontalAlignment(JLabel.LEFT);
 
         switch(screen){
             case ICE_CREAM_FLAVORS:
@@ -333,16 +317,17 @@ public class MainWin extends JFrame{
                 throw new IllegalArgumentException("Invalid screen.");
         }
 
-        displayBuilder.append("</b><br><br>");
+        displayBuilder.append("</b></font><br><br>");
 
+        int i = 1;
         if(screen == Screen.SCOOPS){
             for(Object scoop: arr){
-                displayBuilder.append(i + ".  " + scoop.toString() + "<br>");
+                displayBuilder.append("\t" + i + ".  " + scoop.toString() + "<br>");
                 i++;
             }
         } else {
             for(Object flavor: arr){
-                displayBuilder.append(
+                displayBuilder.append("\t" +
                             i + ".  $" + ((Item)flavor).price() +
                             " " + ((Item)flavor).name() + " - " +
                             ((Item)flavor).description() + "<br>"
@@ -354,26 +339,34 @@ public class MainWin extends JFrame{
         display.setText(displayBuilder.toString());
     }
 
-    // ------------------------------
+    // --------------MISC ASSISTANTS---------------- 
     private void enableScoopIfFlavor(){
-        boolean enable = false;
+        boolean scoopEnabled = false;
         String toolTipMsg = "Create a flavor first!";
         if (emporium.icf().length != 0){
-            enable = true;
+            scoopEnabled = true;
             toolTipMsg = "Create new scoop";
         }
         for(int i = 0;i<2;i++){
-            scpButtons[i].setEnabled(enable);
+            scpButtons[i].setEnabled(scoopEnabled);
             scpButtons[i].setToolTipText(toolTipMsg);
         }
-
-
     }
 
-    private String FILE_VER = "1.0";
-    private String MAGIC_COOKIE = "SCOOP🍦";
+        private void updateOnCreation(Screen screen){ //update mainwin on changes made                               
+            if(Screen.ICE_CREAM_FLAVORS == screen){
+                enableScoopIfFlavor();
+            }
+            if(currScreen == screen){
+                view(screen);
+            }
+    }
+
+    public static final String FILE_VER = "1.3";
+    protected static final String MAGIC_COOKIE = "SCOOP🍦";
     private File filename;
     private JComponent[] scpButtons = null;
-    private Emporium emporium;
+    protected Emporium emporium;
     private JLabel display;
+    private Screen currScreen;
 }
