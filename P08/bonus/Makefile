@@ -5,11 +5,11 @@ all:
 	@echo
 	@echo './reverse.o [args] to run'
 
-$(TARGET):
+reverse:
 	$(C17) -o reverse.o reverse.cpp
 	@echo
 	@echo './reverse.o [args] to run'
 clean:
 	rm -f ./*.o
-	@rm ./reverse
-	@rm ./a.out
+	@rm -f ./reverse
+	@rm -f ./a.out
