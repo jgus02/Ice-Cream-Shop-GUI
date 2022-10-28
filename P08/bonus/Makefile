@@ -1,17 +1,15 @@
 C17 = g++ --std=c++17
 
 all:
-	$(C17) -o hello_me.o  hello_me.cpp
-	$(C17) -o hello_all.o hello_all.cpp
+	$(C17) -o reverse.o reverse.cpp
+	@echo
+	@echo './reverse.o [args] to run'
 
-#hello_all:
-#	$(C17) -o  hello_all.o hello_all.cpp
-#	./hello_all.o
-
-$(TARGET).o:
-	$(C17) -o $@.o $@.cpp
-	./$@.o
-
-
+$(TARGET):
+	$(C17) -o reverse.o reverse.cpp
+	@echo
+	@echo './reverse.o [args] to run'
 clean:
-	rm *.o
+	rm -f ./*.o
+	@rm ./reverse
+	@rm ./a.out
