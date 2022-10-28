@@ -1,17 +1,15 @@
 C17 = g++ --std=c++17
 
 all:
-	$(C17) -o hello_me.o  hello_me.cpp
-	$(C17) -o hello_all.o hello_all.cpp
+	$(C17) -o sorted.o sorted.cpp
+	@echo
+	@echo './sorted.o to run'
 
-#hello_all:
-#	$(C17) -o  hello_all.o hello_all.cpp
-#	./hello_all.o
-
-$(TARGET).o:
-	$(C17) -o $@.o $@.cpp
-	./$@.o
-
-
+$(TARGET):
+	$(C17) -o sorted.o sorted.cpp
+	@echo
+	@echo './sorted.o to run'
 clean:
-	rm *.o
+	rm -f ./*.o
+	@rm -f ./sorted
+	@rm -f ./a.out
