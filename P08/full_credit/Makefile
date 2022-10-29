@@ -4,14 +4,16 @@ all:
 	$(C17) -o hello_me.o  hello_me.cpp
 	$(C17) -o hello_all.o hello_all.cpp
 
-#hello_all:
-#	$(C17) -o  hello_all.o hello_all.cpp
-#	./hello_all.o
+	@echo
+	@echo './(FILENAME).o to run'
 
-$(TARGET).o:
-	$(C17) -o $@.o $@.cpp
-	./$@.o
+hello_all:
+	$(C17) -o  hello_all.o hello_all.cpp
+	./hello_all.o
 
+hello_me:
+	$(C17) -o  hello_me.o hello_me.cpp
+	./hello_me.o
 
 clean:
-	rm *.o
+	rm -f ./*.o
