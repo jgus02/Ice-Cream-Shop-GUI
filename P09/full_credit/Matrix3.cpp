@@ -5,8 +5,6 @@
 #include <ostream>
 #include <vector>
 
-Matrix3::Matrix3() : data{{0,0,0},{0,0,0},{0,0,0}} {
-}
 
 Matrix3::Matrix3(int m00,int m10,int m20,
                  int m01,int m11,int m21, 
