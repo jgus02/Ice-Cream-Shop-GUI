@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<project name="ice ceam :)" default="build">
+  <presetdef name="javac">
+    <javac includeantruntime="false" />
+  </presetdef>
+
+  <target name="build" description="Compile source tree java files">
+    <mkdir dir="build"/>
+      <javac destdir="build">
+        <src path="src"/>
+      </javac>
+  </target>
+
+  <target name="clean" description="Clean output files">
+    <delete>
+      <fileset dir="build">
+        <include name="**/*.class"/>
+      </fileset>
+    </delete>
+  </target>
+</project>
