@@ -1,6 +1,7 @@
 package gui;
 import javax.swing.JList;
-//import javax.swing.JTextField;
+import javax.swing.JPanel;
+import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerListModel;
@@ -23,54 +24,26 @@ import emporium.Emporium;
 first dialog: Create new servings, or select and deselect from previous creations.
 open serving dialog.
 serving dialog: scoop dialog, create new scoops, select/deselect list. 
-                new extra dialog after to add 'toppings'
-                
+                new extra dialog after to add 'toppings'   
 */
 
-public class CreateOrderDialog extends CreationDialog<Order>{ 
-    public CreateOrderDialog(MainWin parent, Emporium emporium){
-        super(parent, "Order");
+public class CreateOrderScreen extends JPanel { 
+    public CreateOrderScreen(Emporium emporium){
+        setLayout(new GridBagLayout());
         this.emporium = emporium;
-
-        // iceCreamFlavors = new JComboBox(emporium.icf());
-        // mixInFlavors = new JList(emporium.mxf());
+        servList = new ArrayList<>();
+        
 
         creationDialog();
     }
 
     public void creationDialog(){ //TODO: remake as horizontal orientation?
-        // JLabel iceCreamFlavor = new JLabel("Ice Cream Flavor");
-        // JLabel mixInFlavor = new JLabel("Mix-Ins");
+        JLabel orderLabel = new JLabel("<HTML><font size=+3><b>Your Order</b></font></HTML>");
+        JLabel servLabel = new JLabel("Servings");
 
-        // Object[] objects = null;
-        // if(emporium.mxf().length > 0){ //OCCURS WHEN mix-ins are available
-        //     Object[] tmp = {iceCreamFlavor, iceCreamFlavors,
-        //                     mixInFlavor,    mixInFlavors};
-        //     objects = tmp;
-        // }
-        // else{ //...no mix-ins available
-        //     Object[] tmp = {iceCreamFlavor, iceCreamFlavors};
-        //     objects = tmp;
-        // }
+        //CreateServingDialog servDialog = new CreateServingDialog();
+        //while(servDialog.getChoice() != null){
 
-        // int button = JOptionPane.showConfirmDialog(
-        //     super.parent,
-        //     objects,
-        //     ("New Scoop"),
-        //     JOptionPane.OK_CANCEL_OPTION,
-        //     JOptionPane.QUESTION_MESSAGE,
-        //     new ImageIcon(getClass().getResource("resources/Scoop.png"))
-        // );
-
-
-        // if((button == JOptionPane.OK_OPTION) && !mixInFlavors.isSelectionEmpty()){
-        //     //occurs when no mix ins are selected OR no mix ins have been created
-        //     getMixInAmounts();
-        // }
-        // else if(button == JOptionPane.OK_OPTION){
-        //     Object[] choices = {"Flavor: " + iceCreamFlavors.getModel().getSelectedItem().toString()};
-        //     super.confirmChoice(choices);
-        // }
     }
 
     @SuppressWarnings("unchecked") private void getMixInAmounts(){
@@ -113,8 +86,8 @@ public class CreateOrderDialog extends CreationDialog<Order>{
         return null;
     }
 
-    private JComboBox iceCreamFlavors;
     private JList mixInFlavors;
-    private ArrayList mixInAmountTracker;
+    private ArrayList<Serving> servList;
+    private JList<Serving> servSelect;
     private Emporium emporium;
 }

@@ -9,12 +9,13 @@ import javax.swing.ImageIcon;
 
 import product.Container;
 
-public class CreateContainerDialog extends CreationDialog<Container>{
+public class CreateContainerDialog extends CreationDialog<Container> {
     protected CreateContainerDialog(MainWin parent){
         super(parent,"Container");
 
         this.names        = new JTextField(30);  
         this.descriptions = new JTextField(30);
+        this.maxScoops    = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1));
         creationDialog();
     }
 
@@ -48,7 +49,7 @@ public class CreateContainerDialog extends CreationDialog<Container>{
         );
 
         if((button == JOptionPane.OK_OPTION)){
-            Object[] choices = {"Flavor: " + names.getText(),
+            Object[] choices = {"Name: " + names.getText(),
                                 "Description: " + descriptions.getText(),
                                 "Max Scoops: " + spinnerToInt(maxScoops)};
             super.confirmChoice(choices);

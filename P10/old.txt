@@ -1,7 +1,7 @@
 package gui;
 import javax.swing.JFrame;
+import java.awt.CardLayout;
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -14,8 +14,6 @@ import javax.swing.JToolTip;
 import java.awt.event.ActionListener;
 import javax.swing.JToolBar;
 import java.awt.BorderLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
 
 import javax.swing.ImageIcon;
 import javax.swing.Box;
@@ -54,11 +52,6 @@ public class MainWin extends JFrame{
         setSize(640, 360);                             
         filename = new File("untitled.scp");
         emporium = new Emporium();
-        JLabel ndisplay  = new JLabel("<HTML><font size=+5><b>Welcome to MICE!</center></b></font></HTML>");
-        ndisplay.setVerticalAlignment(JLabel.TOP);
-        ndisplay.setHorizontalAlignment(JLabel.CENTER);
-        display = new JPanel();
-        display.add(ndisplay);
 
         //
         // ---------- M E N U   B A R ----------
@@ -204,9 +197,13 @@ public class MainWin extends JFrame{
 
         getContentPane().add(toolbar, BorderLayout.PAGE_START);
 
+        display = new JLabel("<HTML><font size=+5><b>Welcome to MICE!</b></font></HTML>", JLabel.CENTER);
+        screens.add(new JPanel(display));
+        screens.add(new JPanel(new GridBagLayout())); //view orders
+        screens.add(new JPanel(new GridBagLayout()));
+        
         setVisible(true);
         
-        this.add(display);
     }
 
     //
@@ -315,7 +312,6 @@ public class MainWin extends JFrame{
     }
 
     protected void onOrderCreateClick() {
-         
         CreateOrderDialog orderDialog = new CreateOrderDialog(this, this.emporium);
         if(orderDialog.success){
             emporium.addOrder(orderDialog.getChoice());
@@ -332,24 +328,37 @@ public class MainWin extends JFrame{
     //
     private void view(Screen screen){
         currScreen = screen;
-
-        getContentPane().remove(display);
-        display = new JPanel(new GridBagLayout());
-        
-        StringBuilder screenTitle = new StringBuilder("<HTML><font size=+2><b>" 
-                                                        + screen.getLabel().toUpperCase());
-        StringBuilder screenDisplay = new StringBuilder("<HTML>");
-
         int i;
+        Object[] arr = {};
+        StringBuilder displayBuilder = new StringBuilder("<HTML><font size=+2><b>");
+        display.setHorizontalAlignment(JLabel.LEFT);
+        if( screen == Screen.ICE_CREAM_FLAVORS || 
+            screen == Screen.MIX_IN_FLAVORS || 
+            screen == Screen.CONTAINERS) {
+            cardPanel
+
+            }
         switch(screen){
             case ICE_CREAM_FLAVORS:
-            case MIX_IN_FLAVORS:
-                Object[] arr = {};
-                if(screen == screen.MIX_IN_FLAVORS) arr = emporium.mxf();
-                else arr = emporium.icf();
-                i = 1;
+                displayBuilder.append("ICE CREAM FLAVORS</b></font><br><br>");
+                arr = emporium.icf();
+                i=1;
                 for(Object flavor: arr){
-                    screenDisplay.append("\t" +
+                    displayBuilder.append("\t" +
+                                i + ".  $" + ((Item)flavor).price() +
+                                " " + ((Item)flavor).name() + " - " +
+                                ((Item)flavor).description() + "<br>"
+                    );
+                    i++;
+                }
+                break;
+
+            case MIX_IN_FLAVORS:
+                displayBuilder.append("MIX-IN FLAVORS</b></font><br><br>");
+                arr = emporium.mxf();
+                i=1;
+                for(Object flavor: arr){
+                    displayBuilder.append("\t" +
                                 i + ".  $" + ((Item)flavor).price() +
                                 " " + ((Item)flavor).name() + " - " +
                                 ((Item)flavor).description() + "<br>"
@@ -359,9 +368,11 @@ public class MainWin extends JFrame{
                 break;
 
             case CONTAINERS:
-                i = 1;
-                for(Object cont : emporium.cont()){
-                    screenDisplay.append("\t" +
+                displayBuilder.append("CONTAINERS</b></font><br><br>");
+                arr = emporium.cont();
+                i=1;
+                for(Object cont : arr){
+                    displayBuilder.append("\t" +
                                 i + ".  " + ((Container)cont).name() + " - " +
                                 ((Container)cont).desc() + "<br>"
                     );
@@ -370,36 +381,22 @@ public class MainWin extends JFrame{
                 break;
 
             case ORDERS:
-                i = 1;
-                for(Object order: emporium.order()){
-                    screenDisplay.append("\t" + i + ".  " + order.toString() + "<br>");
+                displayBuilder.append("ORDERS</b></font><br><br>");
+                arr = emporium.order();
+                i=1;
+                for(Object order: arr){
+                    displayBuilder.append("\t" + i + ".  " + order.toString() + "<br>");
                     i++;
                 }
+                //JPanel newOrderPanel = CreateOrderDialog(this, emporium);
+                //this.add(newOrderPanel);
                 break;
 
             default:
                 throw new IllegalArgumentException("Invalid screen.");
         }
-        screenTitle.append("</b></font></HTML>");
-        screenDisplay.append("</HTML>");
-
-        GridBagConstraints c = new GridBagConstraints();
-        c.gridy = 0;
-        c.weighty = 0;
-        c.anchor = GridBagConstraints.NORTH;
-        c.fill = GridBagConstraints.NONE;
-
-        display.add(new JLabel(screenTitle.toString()), c);
-
-        c.weighty = 1;
-        c.gridy = 1;
-        c.weightx = 1;
-        c.anchor = GridBagConstraints.NORTHWEST;
-        display.add(new JLabel(screenDisplay.toString()), c);
-
-        getContentPane().add(display);
-        getContentPane().revalidate();
-        getContentPane().repaint();
+        displayBuilder.append("</HTML>");
+        display.setText(displayBuilder.toString());
     }
 
     // --------------MISC ASSISTANTS---------------- 
@@ -429,7 +426,7 @@ public class MainWin extends JFrame{
     public static final String MAGIC_COOKIE = "SCOOP🍦";
     protected Emporium emporium;
     private File filename;
-    //private JComponent[] scpButtons = null;
-    private JTabbedPane display;
+    private JLabel display;
     private Screen currScreen;
+    private ArrayList<JPanel> screens;
 }
