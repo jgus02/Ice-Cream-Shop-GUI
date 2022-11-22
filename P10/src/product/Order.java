@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.lang.Integer;
 
 public class Order {
+    public Order(){}
     public Order(BufferedReader br) throws IOException {
         for(int i=0;i<Integer.parseInt(br.readLine()); ++i){
             addServing(new Serving(br));

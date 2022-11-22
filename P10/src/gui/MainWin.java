@@ -1,7 +1,10 @@
 package gui;
 import javax.swing.JFrame;
+import javax.swing.JList;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
+import java.awt.CardLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -16,6 +19,9 @@ import javax.swing.JToolBar;
 import java.awt.BorderLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import java.awt.Component;
+import java.awt.Dimension;
 
 import javax.swing.ImageIcon;
 import javax.swing.Box;
@@ -51,14 +57,9 @@ public class MainWin extends JFrame{
         super(titleBar); 
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
-        setSize(640, 360);                             
+        setSize(720, 520);                             
         filename = new File("untitled.scp");
         emporium = new Emporium();
-        JLabel ndisplay  = new JLabel("<HTML><font size=+5><b>Welcome to MICE!</center></b></font></HTML>");
-        ndisplay.setVerticalAlignment(JLabel.TOP);
-        ndisplay.setHorizontalAlignment(JLabel.CENTER);
-        display = new JPanel();
-        display.add(ndisplay);
 
         //
         // ---------- M E N U   B A R ----------
@@ -201,14 +202,73 @@ public class MainWin extends JFrame{
         toolbar.add(mxfCreateB);
         toolbar.add(contCreateB);
         toolbar.add(orderCreateB);
-
         getContentPane().add(toolbar, BorderLayout.PAGE_START);
 
-        setVisible(true);
+            // WELCOME SCREEN
+
+        JPanel mainWindow = new JPanel();
+
+        JButton prevScreenB = new JButton("<");
+        JButton nextScreenB = new JButton(">");
+        prevScreenB.addActionListener(event -> ((CardLayout)display.getLayout()).previous(display));
+        nextScreenB.addActionListener(event -> ((CardLayout)display.getLayout()).next(display));
+        //prevScreenB.setEnabled(false);
+        //nextScreenB.setEnabled(false);
+        JPanel leftMargin = new JPanel();
+        JPanel rightMargin = new JPanel();
+
+        JPanel listScreen = new JPanel(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        JLabel welcome  = new JLabel("<HTML><font size=+5><b>Welcome to MICE!</center></b></font></HTML>",
+                                    JLabel.CENTER);
+        welcome.setVerticalAlignment(JLabel.TOP);
+;
+        c.gridy = 0;
+        c.weighty = 0;
+        c.anchor = GridBagConstraints.NORTH;
+        c.fill = GridBagConstraints.NONE;
+        listScreen.add(welcome, c);
+
+        c.weighty = 1;
+        c.gridy = 1;
+        c.weightx = 1;
+        c.anchor = GridBagConstraints.NORTHWEST;
+        listScreen.add(new JLabel(""), c);
+
+        display = new JPanel(new CardLayout());
+        display.add(listScreen, "0");
         
-        this.add(display);
+        leftMargin.add(prevScreenB);
+        rightMargin.add(nextScreenB);
+        leftMargin.setPreferredSize(new Dimension(60,display.getHeight()));
+        rightMargin.setPreferredSize(new Dimension(60,display.getHeight()));
+        getContentPane().add(leftMargin,BorderLayout.WEST);
+        getContentPane().add(display, BorderLayout.CENTER);
+        getContentPane().add(rightMargin, BorderLayout.EAST);
+
+
+        setVisible(true);
+
+        testing();
     }
 
+    public void testing(){
+        filename = new File("hasItems.scp");
+            try(BufferedReader br = new BufferedReader(new FileReader(filename))) {
+                if(!(br.readLine()).equals(MAGIC_COOKIE)){
+                    throw new RuntimeException("Not a MICE file.");
+                }
+                if(!(br.readLine()).equals(FILE_VER)){
+                    throw new RuntimeException("Incompatible MICE file format.");
+                }
+                emporium = new Emporium(br);
+                updateOnCreation(Screen.ICE_CREAM_FLAVORS);
+            } catch (Exception e){
+                JOptionPane.showMessageDialog(this,
+                    "Could not open " + filename + ":\n" +
+                    e, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+    }
     //
     // ------------ L I S T E N E R S ------------
     // -------- FILE LISTENERS ---------
@@ -260,6 +320,16 @@ public class MainWin extends JFrame{
                     e, "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
+        switch (display.getComponentCount()){
+            default:
+                display.remove(2);
+            case 2:
+                display.remove(1);
+                break;
+            case 1:
+            case 0:
+                break;
+        }
     }
 
     private JFileChooser initializeFileChooser(){ //not a listener
@@ -273,21 +343,6 @@ public class MainWin extends JFrame{
     protected void onQuitClick(){
         System.exit(0);
     }
-
-    
-    // ---------VIEW LISTENSTERS----------
-    // protected void onIcfViewClick(){
-    //     view(Screen.ICE_CREAM_FLAVORS);
-    // }
-    // protected void onMxfViewClick(){
-    //     view(Screen.MIX_IN_FLAVORS);
-    // }
-    // protected void onContViewClick(){
-    //     view(Screen.CONTAINERS);
-    // }
-    // protected void onOrderViewClick(){
-    //     view(Screen.ORDERS);
-    // }
     
     // -------CREATE LISTENERS------------
     protected void onIcfCreateClick(){
@@ -315,12 +370,17 @@ public class MainWin extends JFrame{
     }
 
     protected void onOrderCreateClick() {
-         
-        CreateOrderDialog orderDialog = new CreateOrderDialog(this, this.emporium);
-        if(orderDialog.success){
-            emporium.addOrder(orderDialog.getChoice());
-            updateOnCreation(Screen.ORDERS);
+        if(display.getComponentCount() > 1){
+            ((CardLayout)display.getLayout()).show(display, "1");
+            return;
         }
+        //((JToolBar)getContentPane().getComponent(0)).getComponentAtIndex(12).setEnabled(false);
+        //getJMenuBar().getMenu(2).getItem(3).setEnabled(false);
+        CreateOrderScreen orderScreen = new CreateOrderScreen(this);
+        ((CardLayout)display.getLayout()).next(display);
+
+        //getJMenuBar().getMenu(2).getItem(3).setEnabled(true);
+        //((JToolBar)getContentPane().getComponent(0)).getComponentAtIndex(12).setEnabled(true);
     }
 
     // ------------HELP LISTENERS-------------
@@ -332,9 +392,6 @@ public class MainWin extends JFrame{
     //
     private void view(Screen screen){
         currScreen = screen;
-
-        getContentPane().remove(display);
-        display = new JPanel(new GridBagLayout());
         
         StringBuilder screenTitle = new StringBuilder("<HTML><font size=+2><b>" 
                                                         + screen.getLabel().toUpperCase());
@@ -349,34 +406,25 @@ public class MainWin extends JFrame{
                 else arr = emporium.icf();
                 i = 1;
                 for(Object flavor: arr){
-                    screenDisplay.append("\t" +
-                                i + ".  $" + ((Item)flavor).price() +
-                                " " + ((Item)flavor).name() + " - " +
-                                ((Item)flavor).description() + "<br>"
+                    screenDisplay.append("\t" + i + ".  $" + ((Item)flavor).price()+"\t "
+                        +((Item)flavor).name()+" - "+((Item)flavor).description()+"<br>"
                     );
                     i++;
-                }
-                break;
-
+                } break;
             case CONTAINERS:
                 i = 1;
                 for(Object cont : emporium.cont()){
-                    screenDisplay.append("\t" +
-                                i + ".  " + ((Container)cont).name() + " - " +
-                                ((Container)cont).desc() + "<br>"
+                    screenDisplay.append("\t"+ i +".  "+((Container)cont).name() 
+                        + " - " + ((Container)cont).desc() + "<br>"
                     );
                     i++;
-                }
-                break;
-
+                } break;
             case ORDERS:
                 i = 1;
                 for(Object order: emporium.order()){
                     screenDisplay.append("\t" + i + ".  " + order.toString() + "<br>");
                     i++;
-                }
-                break;
-
+                } break;
             default:
                 throw new IllegalArgumentException("Invalid screen.");
         }
@@ -384,42 +432,55 @@ public class MainWin extends JFrame{
         screenDisplay.append("</HTML>");
 
         GridBagConstraints c = new GridBagConstraints();
-        c.gridy = 0;
-        c.weighty = 0;
-        c.anchor = GridBagConstraints.NORTH;
-        c.fill = GridBagConstraints.NONE;
+        // c.gridy = 0;
+        // c.weighty = 0;
+        // c.anchor = GridBagConstraints.NORTH;
+        // c.fill = GridBagConstraints.NONE;
+        ((JLabel)((JPanel)display.getComponent(0)).getComponent(0)).setText(screenTitle.toString());
 
-        display.add(new JLabel(screenTitle.toString()), c);
+        // c.weighty = 1;
+        // c.gridy = 1;
+        // c.weightx = 1;
+        // c.anchor = GridBagConstraints.NORTHWEST;
+        ((JLabel)((JPanel)display.getComponent(0)).getComponent(1)).setText(screenDisplay.toString());
 
-        c.weighty = 1;
-        c.gridy = 1;
-        c.weightx = 1;
-        c.anchor = GridBagConstraints.NORTHWEST;
-        display.add(new JLabel(screenDisplay.toString()), c);
+        ((CardLayout)display.getLayout()).show(display, "0");
+        ((JPanel)display.getComponent(0)).revalidate();
+        ((JPanel)display.getComponent(0)).repaint();
 
-        getContentPane().add(display);
-        getContentPane().revalidate();
-        getContentPane().repaint();
+        //getContentPane().revalidate();
+        //getContentPane().repaint();
     }
-
-    // --------------MISC ASSISTANTS---------------- 
-    // private void enableScoopIfFlavor(){
-    //     boolean scoopEnabled = false;
-    //     String toolTipMsg = "Create a flavor first!";
-    //     if (emporium.icf().length != 0){
-    //         scoopEnabled = true;
-    //         toolTipMsg = "Create new scoop";
-    //     }
-    //     for(int i = 0;i<2;i++){
-    //         scpButtons[i].setEnabled(scoopEnabled);
-    //         scpButtons[i].setToolTipText(toolTipMsg);
-    //     }
-    // }
 
         private void updateOnCreation(Screen screen){ //update mainwin on changes made                               
             // if(Screen.ICE_CREAM_FLAVORS == screen){
             //     enableScoopIfFlavor();
             // }
+            //System.out.print(display.getComponentCount());
+
+            switch (display.getComponentCount()) {
+                default:
+                case 3:
+                    ((CreateServingScreen)display.getComponent(2)).updateScreen(screen);
+                case 2:
+                    ((CreateOrderScreen)display.getComponent(1)).updateScreen(screen);
+                    break;
+                case 1:
+                    break;
+            }
+            //if(display.getComponentCount() > 1){
+                //((CreateOrderScreen)display.getComponent(1)).emporium = this.emporium;
+                
+                
+                // ArrayList<Serving> currentOrder = new ArrayList<>(emporium.order()[])
+                // list.fireIntervalAdded(list.getModel(), 0, )
+                // list.getModel().ensureIndexIsVisible(3);
+                // ((CreateOrderScreen)display.getComponent(1)).revalidate();
+                // ((CreateOrderScreen)display.getComponent(1)).repaint();
+                // ((JPanel)display.getComponent(1)).revalidate();
+                // ((JPanel)display.getComponent(1)).repaint();
+                
+            //}
             if(currScreen == screen){
                 view(screen);
             }
@@ -427,9 +488,8 @@ public class MainWin extends JFrame{
 
     public static final String FILE_VER = "1.4";
     public static final String MAGIC_COOKIE = "SCOOP🍦";
-    protected Emporium emporium;
+    public Emporium emporium;
+    protected JPanel display;
     private File filename;
-    //private JComponent[] scpButtons = null;
-    private JTabbedPane display;
     private Screen currScreen;
 }

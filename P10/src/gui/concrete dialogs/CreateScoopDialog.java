@@ -18,9 +18,9 @@ import product.IceCreamFlavor;
 import emporium.Emporium;
 
 public class CreateScoopDialog extends CreationDialog<Scoop>{ 
-    public CreateScoopDialog(MainWin parent, Emporium emporium){
+    public CreateScoopDialog(MainWin parent){
         super(parent, "Scoop");
-        this.emporium = emporium;
+        this.emporium = parent.emporium;
 
         iceCreamFlavors = new JComboBox(emporium.icf());
         mixInFlavors = new JList(emporium.mxf());

@@ -26,6 +26,9 @@ public class Container {
     public String desc(){
         return desc;
     }
+    public int maxScoops(){
+        return maxScoops;
+    }
 
     public void save(BufferedWriter bw) throws IOException {
         bw.write("" + 
@@ -33,6 +36,10 @@ public class Container {
             desc + "," + 
             maxScoops + "\n"
         );
+    }
+    @Override
+    public String toString(){
+        return (name + " - " + maxScoops + " Scoops");
     }
 
     private String name;

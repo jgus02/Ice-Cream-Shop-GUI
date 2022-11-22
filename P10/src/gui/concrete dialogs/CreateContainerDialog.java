@@ -9,7 +9,7 @@ import javax.swing.ImageIcon;
 
 import product.Container;
 
-public class CreateContainerDialog extends CreationDialog<Container> {
+public class CreateContainerDialog extends CreationDialog<Container>{
     protected CreateContainerDialog(MainWin parent){
         super(parent,"Container");
 
