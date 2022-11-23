@@ -85,30 +85,36 @@ public class MainWin extends JFrame{
         JMenuItem mxfView       = new JMenuItem("Mix-In Flavors");
         JMenuItem contView      = new JMenuItem("Containers");
         JMenuItem orderView     = new JMenuItem("Orders");
+        JMenuItem custView      = new JMenuItem("Customers");
         icfView     .addActionListener(event -> view(Screen.ICE_CREAM_FLAVORS));
         mxfView     .addActionListener(event -> view(Screen.MIX_IN_FLAVORS));
         //scpView     .addActionListener(event -> onScpViewClick());
         contView    .addActionListener(event -> view(Screen.CONTAINERS));
         orderView   .addActionListener(event -> view(Screen.ORDERS));
+        custView    .addActionListener(event -> view(Screen.CUSTOMERS));
         view    .add(icfView);
         view    .add(mxfView);
         //view    .add(scpView);
         view    .add(contView);
         view    .add(orderView);
+        view    .add(custView);
 
         JMenu     create        = new JMenu    ("Create");
         JMenuItem icfCreate     = new JMenuItem("Ice Cream Flavor");
         JMenuItem mxfCreate     = new JMenuItem("Mix-In Flavor");
         JMenuItem contCreate    = new JMenuItem("Container");
         JMenuItem orderCreate   = new JMenuItem("Order");
+        JMenuItem custCreate    = new JMenuItem("Customer");
         icfCreate   .addActionListener(event -> onIcfCreateClick());
         mxfCreate   .addActionListener(event -> onMxfCreateClick());
         contCreate  .addActionListener(event -> onContCreateClick());
         orderCreate .addActionListener(event -> onOrderCreateClick());
+        custCreate  .addActionListener(event -> onCustCreateClick());
         create  .add(icfCreate);
         create  .add(mxfCreate);
         create  .add(contCreate);
         create  .add(orderCreate);
+        create  .add(custCreate);
 
         //scpCreate.setToolTipText("Create a flavor first!");
         //scpCreate.setEnabled(false);  //must have at least one ice cream flavor to use
@@ -165,15 +171,21 @@ public class MainWin extends JFrame{
             = new JButton(new ImageIcon(this.getClass().getResource("resources/orderView.png")));
         orderViewB   .setActionCommand("View order");
         orderViewB   .setToolTipText("View orders");
+        JButton custViewB
+            = new JButton(new ImageIcon(this.getClass().getResource("resources/customerView.png")));
+        custViewB   .setActionCommand("View cust");
+        custViewB   .setToolTipText("View customers");
         
         icfViewB   .addActionListener(event -> view(Screen.ICE_CREAM_FLAVORS));
         mxfViewB   .addActionListener(event -> view(Screen.MIX_IN_FLAVORS));
-        contViewB   .addActionListener(event -> view(Screen.CONTAINERS));
-        orderViewB   .addActionListener(event -> view(Screen.ORDERS));
+        contViewB  .addActionListener(event -> view(Screen.CONTAINERS));
+        orderViewB .addActionListener(event -> view(Screen.ORDERS));
+        custViewB  .addActionListener(event -> view(Screen.CUSTOMERS));
         toolbar.add(icfViewB);
         toolbar.add(mxfViewB);
         toolbar.add(contViewB);
         toolbar.add(orderViewB);
+        toolbar.add(custViewB);
         
         toolbar.add(Box.createHorizontalStrut(10));
 
@@ -193,18 +205,24 @@ public class MainWin extends JFrame{
             = new JButton(new ImageIcon(getClass().getResource("resources/orderCreate.png")));
         orderCreateB .setActionCommand("Create order");
         orderCreateB .setToolTipText("Make an order");
+        JButton custCreateB  
+            = new JButton(new ImageIcon(getClass().getResource("resources/customerCreate.png")));
+        custCreateB  .setActionCommand("Create cust");
+        custCreateB  .setToolTipText("Register new customer");
         //scpCreateB.setEnabled(false);
-        icfCreateB .addActionListener(event -> onIcfCreateClick());
-        mxfCreateB .addActionListener(event -> onMxfCreateClick());
-        contCreateB .addActionListener(event -> onContCreateClick());
+        icfCreateB   .addActionListener(event -> onIcfCreateClick());
+        mxfCreateB   .addActionListener(event -> onMxfCreateClick());
+        contCreateB  .addActionListener(event -> onContCreateClick());
         orderCreateB .addActionListener(event -> onOrderCreateClick());
+        custCreateB  .addActionListener(event -> onCustCreateClick());
         toolbar.add(icfCreateB);
         toolbar.add(mxfCreateB);
         toolbar.add(contCreateB);
         toolbar.add(orderCreateB);
+        toolbar.add(custCreateB);
         getContentPane().add(toolbar, BorderLayout.PAGE_START);
 
-            // WELCOME SCREEN
+            // WELCOME SCREEN AND GUI FINAGLING
 
         JPanel mainWindow = new JPanel();
 
@@ -214,8 +232,8 @@ public class MainWin extends JFrame{
         nextScreenB.addActionListener(event -> ((CardLayout)display.getLayout()).next(display));
         //prevScreenB.setEnabled(false);
         //nextScreenB.setEnabled(false);
-        JPanel leftMargin = new JPanel();
-        JPanel rightMargin = new JPanel();
+        JPanel leftMargin = new JPanel(new GridBagLayout());
+        JPanel rightMargin = new JPanel(new GridBagLayout());
 
         JPanel listScreen = new JPanel(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -226,14 +244,14 @@ public class MainWin extends JFrame{
         c.gridy = 0;
         c.weighty = 0;
         c.anchor = GridBagConstraints.NORTH;
-        c.fill = GridBagConstraints.NONE;
+        c.fill = GridBagConstraints.HORIZONTAL;
         listScreen.add(welcome, c);
 
         c.weighty = 1;
         c.gridy = 1;
         c.weightx = 1;
         c.anchor = GridBagConstraints.NORTHWEST;
-        listScreen.add(new JLabel(""), c);
+        listScreen.add(new JLabel("Register a customer to begin."), c);
 
         display = new JPanel(new CardLayout());
         display.add(listScreen, "0");
@@ -370,17 +388,27 @@ public class MainWin extends JFrame{
     }
 
     protected void onOrderCreateClick() {
-        if(display.getComponentCount() > 1){
+        if(emporium.cust().length == 0){ //make a customer if none exist
+            if(!onCustCreateClick()) {
+                return;
+            }
+        }
+        if(display.getComponentCount() > 1){ //screen already open; return to existing screen
             ((CardLayout)display.getLayout()).show(display, "1");
             return;
         }
-        //((JToolBar)getContentPane().getComponent(0)).getComponentAtIndex(12).setEnabled(false);
-        //getJMenuBar().getMenu(2).getItem(3).setEnabled(false);
         CreateOrderScreen orderScreen = new CreateOrderScreen(this);
         ((CardLayout)display.getLayout()).next(display);
+    }
 
-        //getJMenuBar().getMenu(2).getItem(3).setEnabled(true);
-        //((JToolBar)getContentPane().getComponent(0)).getComponentAtIndex(12).setEnabled(true);
+    protected boolean onCustCreateClick() {
+        CreateCustomerDialog custDialog = new CreateCustomerDialog(this);
+        if(custDialog.success) {
+            emporium.addCust(custDialog.getChoice());
+            updateOnCreation(Screen.CUSTOMERS);
+        }
+        //System.out.println("" + custDialog.success);
+        return custDialog.success;
     }
 
     // ------------HELP LISTENERS-------------
@@ -421,9 +449,14 @@ public class MainWin extends JFrame{
                 } break;
             case ORDERS:
                 i = 1;
-                for(Object order: emporium.order()){
-                    screenDisplay.append("\t" + i + ".  " + order.toString() + "<br>");
+                for(Object o: emporium.order()){
+                    Order order = (Order)o;
+                    screenDisplay.append("\tOrder " + i + " for "+ order.getCustomer().name() + " $" + order.price() + "<br>" + order.toString() + "<br>");
                     i++;
+                } break;
+            case CUSTOMERS:
+                for(Object cust: emporium.cust()){
+                    screenDisplay.append("\t" + cust.toString() + "<br>");
                 } break;
             default:
                 throw new IllegalArgumentException("Invalid screen.");
@@ -488,8 +521,8 @@ public class MainWin extends JFrame{
 
     public static final String FILE_VER = "1.4";
     public static final String MAGIC_COOKIE = "SCOOP🍦";
-    public Emporium emporium;
-    protected JPanel display;
+    Emporium emporium; //package private :)
+    JPanel display;
     private File filename;
     private Screen currScreen;
 }

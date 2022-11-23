@@ -11,23 +11,16 @@ public class Scoop{
         this.flavor = flavor;   
     } 
 
-    public Scoop(BufferedReader br) throws IOException {
-        this.flavor = new IceCreamFlavor(br);
-        int numMixins = Integer.parseInt(br.readLine());
-        for(int i = 0;i < numMixins; i++){
-            addMixin(new MixIn(br));
-        }
-    }
-
-    public void save(BufferedWriter bw) throws IOException{
-        flavor.save(bw);
-        bw.write("" + mixins.size() + '\n');
-        for(MixIn mix : mixins){
-            mix.save(bw);
-        }
-    }
     public void addMixin(MixIn mixin){
         mixins.add(mixin);
+    }
+
+    public int price(){
+        int price = flavor.price();
+        for(MixIn mix : mixins){
+            price += mix.price();
+        }
+        return price;
     }
 
     @Override
@@ -43,6 +36,22 @@ public class Scoop{
         mixinList.delete(0,1); //removes first ", " separator
 
         return flavor.name() +" with"+ mixinList.toString(); 
+    }
+
+    public Scoop(BufferedReader br) throws IOException {
+        this.flavor = new IceCreamFlavor(br);
+        int numMixins = Integer.parseInt(br.readLine());
+        for(int i = 0;i < numMixins; i++){
+            addMixin(new MixIn(br));
+        }
+    }
+
+    public void save(BufferedWriter bw) throws IOException{
+        flavor.save(bw);
+        bw.write("" + mixins.size() + '\n');
+        for(MixIn mix : mixins){
+            mix.save(bw);
+        }
     }
 
     private IceCreamFlavor flavor;

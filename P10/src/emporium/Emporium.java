@@ -4,6 +4,10 @@ import product.IceCreamFlavor;
 import product.MixInFlavor;
 import product.Order;
 import product.Container;
+import product.Serving;
+
+import person.Customer;
+
 import java.util.ArrayList;
 
 import java.io.BufferedReader;
@@ -33,6 +37,14 @@ public class Emporium{
         for(i = 0;i < arrSize; i++){
             containers.add(new Container(br));
         }
+        arrSize = Integer.parseInt(br.readLine());
+        for(i = 0;i < arrSize; i++){
+            customers.add(new Customer(br));
+        }
+        // arrSize = Integer.parseInt(br.readLine());
+        // for(i = 0;i < arrSize; i++){
+        //     favoriteServings.add(new     (br));
+        // }
     }
 
     public void save(BufferedWriter bw) throws IOException{
@@ -52,6 +64,10 @@ public class Emporium{
         for(Container container : containers){
             container.save(bw);
         }
+        bw.write("" + customers.size() + '\n');
+        for(Customer customer : customers){
+            customer.save(bw);
+        }
     }
     
     public void addIcf(IceCreamFlavor flavor){
@@ -62,9 +78,16 @@ public class Emporium{
     }
     public void addOrder(Order order){
         orders.add(order);
+        Customer customer = order.getCustomer();
+        for(Object serv : order.servings()){
+            favoriteServings.put(customer, (Serving)serv);
+        }
     }
     public void addCont(Container container){
         containers.add(container);
+    }
+    public void addCust(Customer customer){
+        customers.add(customer);
     }
     
     public Object[] icf(){
@@ -79,7 +102,15 @@ public class Emporium{
     public Object[] cont(){
         return containers.toArray();
     }
+    public Object[] cust(){
+        return customers.toArray();
+    }
+    public Object[] favoriteServings(Customer customer){
+        return favoriteServings.get(customer);
+    }
 
+    private MultiMap<Customer,Serving> favoriteServings = new MultiMap<>();
+    private ArrayList<Customer> customers = new ArrayList<>();
     private ArrayList<IceCreamFlavor> icf = new ArrayList<>();
     private ArrayList<MixInFlavor> mxf = new ArrayList<>();
     private ArrayList<Order> orders = new ArrayList<>();

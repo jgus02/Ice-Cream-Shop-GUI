@@ -3,7 +3,8 @@ public enum Screen{
     ICE_CREAM_FLAVORS("Ice Cream Flavors"),
     MIX_IN_FLAVORS("Mix-In Flavors"),
     CONTAINERS("Containers"),
-    ORDERS("Orders");
+    ORDERS("Orders"),
+    CUSTOMERS("Customers");
 
    private String label;
    Screen(String label) 

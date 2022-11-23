@@ -49,16 +49,11 @@ serving dialog: scoop dialog, create new scoops, select/deselect list.
 
 public class CreateServingScreen extends JPanel { 
     public CreateServingScreen(CreateOrderScreen parent, Container cont){
-        this.emporium = parent.emporium;
-        scoopArr = new ArrayList<Scoop>();
+        this.emporium = parent.emporium;    
         serving = new Serving(cont);
         setLayout(new GridBagLayout());
 
-        scoops = new JList();
-        scoops.setModel(new DefaultListModel());
-        JScrollPane scoopScrollPane = new JScrollPane(scoops);
-        scoops.setLayoutOrientation(JList.VERTICAL);
-
+        //'TOPPING' jpanel topInterface -- right jpanel
         topInterface = new JPanel(new GridBagLayout());
         JSpinner topAmount = new JSpinner(new SpinnerListModel(MixInAmount.values()));
         JComboBox topFlavor = new JComboBox(emporium.mxf());
@@ -68,8 +63,8 @@ public class CreateServingScreen extends JPanel {
         JScrollPane toppingScrollPane = new JScrollPane(toppings);
         JButton addTopB = new JButton("Add To Container");
         addTopB.addActionListener(event -> onAddToppingClick((MixInFlavor)topFlavor.getSelectedItem(), (MixInAmount)topAmount.getValue(), toppings));
-
-
+        JLabel displayPrice = new JLabel("$" + servingPrice);
+            //UI management here
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5,0,5,0);
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -85,27 +80,35 @@ public class CreateServingScreen extends JPanel {
         gbc.fill = GridBagConstraints.BOTH;
         topInterface.add(toppingScrollPane, gbc);
 
-
-
+        // 'NEW SCOOP' jpanel main panel -- bottom left panel
         JButton newScoopB = new JButton("New Scoop");
         newScoopB.addActionListener(event -> onNewScoopClick(parent));
+        scoops = new JList();
+        scoops.setModel(new DefaultListModel());
+        JScrollPane scoopScrollPane = new JScrollPane(scoops);
+        scoops.setLayoutOrientation(JList.VERTICAL);
+            //buttonPanel with 'cancel' and 'add to order'
+        JPanel buttonPanel = new JPanel(new GridBagLayout());
         JButton addServingB = new JButton("Add to Order");
         addServingB.addActionListener(event -> onAddServingClick(parent));
-        //JButton cancelB = new JButton("Cancel Serving");
-
+        JButton cancelB = new JButton("Cancel Serving");
+        cancelB.addActionListener(event -> onCancelClick(parent));
+            //ui management for buttonPanel
+            gbc = new GridBagConstraints();
+            gbc.fill = GridBagConstraints.HORIZONTAL;
+            buttonPanel.add(addServingB, gbc);
+            gbc.gridx = 1;
+            buttonPanel.add(cancelB, gbc);
+        //UI management for main panel
         gbc = new GridBagConstraints();
         gbc.insets = new Insets(5,10,5,10); //top, left, bottom, right
         gbc.weightx = 1;
         gbc.gridy = 0;
         gbc.weighty = 0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        add(new JLabel("Container: "+cont.name()),gbc);
+        add(new JLabel("<HTML><font size =+2>Container: "+cont.name()+"</font></HTML>"),gbc);
         gbc.gridy = 1;
-        add(new JLabel("Capacity: "+cont.maxScoops()+" Scoops"),gbc);
-
-        // JPanel buttonPanel = new JPanel();
-        // buttonPanel.add(addServingB);
-        // buttonPanel.add(cancelB);
+        add(new JLabel("Capacity: "+serving.numScoops()+"/"+cont.maxScoops()+" Scoops"),gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 2;
@@ -135,8 +138,11 @@ public class CreateServingScreen extends JPanel {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridy = 3;
         gbc.gridx = 1;
-        // add(buttonPanel, gbc);
-        add(addServingB, gbc);
+        add(buttonPanel, gbc);
+
+        gbc.gridy = 0;
+        gbc.gridx = 1;
+        add(displayPrice, gbc);
 
         //LAYOUT ENDS HERE
         
@@ -147,8 +153,9 @@ public class CreateServingScreen extends JPanel {
     public void onAddToppingClick(MixInFlavor flav, MixInAmount amnt, JList toppings){
         MixIn mix = new MixIn(flav, amnt);
         serving.addTopping(mix);
+        servingPrice += mix.price();
         ((DefaultListModel)toppings.getModel()).addElement(mix);
-       
+       ((JLabel)getComponent(7)).setText("<HTML><font size =+2>$" + servingPrice + "</font></HTML>");
     }
 
     public void onNewScoopClick(CreateOrderScreen parent) {
@@ -156,18 +163,24 @@ public class CreateServingScreen extends JPanel {
         if(scpDialog.success){
             Scoop scp = scpDialog.getChoice();
             serving.addScoop(scp);
-            scoopArr.add(scp);
             ((DefaultListModel)scoops.getModel()).addElement(scp);
+            servingPrice += scp.price();
+            ((JButton)getComponent(3)).setToolTipText("Container full!");
+            ((JLabel)getComponent(1)).setText("Capacity: "+serving.numScoops()+"/"+serving.container().maxScoops()+" Scoops");
+            ((JLabel)getComponent(7)).setText("<HTML><font size =+2>$" + servingPrice + "</font></HTML>");
+            if(serving.numScoops() == serving.container().maxScoops()) {
+                ((JButton)getComponent(3)).setEnabled(false);
+            }
         }
     }
 
     public void onAddServingClick(CreateOrderScreen parent) {
-        ((DefaultListModel)parent.servList.getModel()).addElement(serving);
-        ((CardLayout)parent.main.display.getLayout()).previous(parent.main.display);
-        parent.main.display.remove(2);
+        parent.addServing(serving);
+        onCancelClick(parent);
     }
 
     public void onCancelClick(CreateOrderScreen parent) {
+    ((CardLayout)parent.main.display.getLayout()).previous(parent.main.display);
         parent.main.display.remove(2);
     }
 
@@ -179,9 +192,9 @@ public class CreateServingScreen extends JPanel {
         repaint();
     }
     
+    int servingPrice;
     private Serving serving;
     private JList<Scoop> scoops;
     private JPanel topInterface;
-    private ArrayList<Scoop> scoopArr;
     private Emporium emporium;
 }

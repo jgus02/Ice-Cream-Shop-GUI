@@ -12,14 +12,7 @@ public class Container {
         this.desc = desc;
         this.maxScoops = maxScoops;
     }
-    public Container(BufferedReader br) throws IOException {
-        String[] values = (br.readLine()).split(",");
-
-        this.name      = values[0];
-        this.desc      = values[1];
-        this.maxScoops = Integer.parseInt(values[2]);
-    }
-
+    
     public String name(){
         return name; 
     }
@@ -30,16 +23,25 @@ public class Container {
         return maxScoops;
     }
 
+    @Override
+    public String toString(){
+        return (name + " - " + maxScoops + " Scoops");
+    }
+
+    public Container(BufferedReader br) throws IOException {
+        String[] values = (br.readLine()).split(",");
+
+        this.name      = values[0];
+        this.desc      = values[1];
+        this.maxScoops = Integer.parseInt(values[2]);
+    }
+    
     public void save(BufferedWriter bw) throws IOException {
         bw.write("" + 
             name + "," + 
             desc + "," + 
             maxScoops + "\n"
         );
-    }
-    @Override
-    public String toString(){
-        return (name + " - " + maxScoops + " Scoops");
     }
 
     private String name;

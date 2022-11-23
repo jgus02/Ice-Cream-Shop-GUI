@@ -15,7 +15,7 @@ public class CreateContainerDialog extends CreationDialog<Container>{
 
         this.names        = new JTextField(30);  
         this.descriptions = new JTextField(30);
-        this.maxScoops    = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1));
+        this.maxScoops    = new JSpinner(new SpinnerNumberModel(1, 1, 100, 1));
         creationDialog();
     }
 

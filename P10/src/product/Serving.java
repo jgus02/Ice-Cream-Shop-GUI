@@ -11,26 +11,19 @@ public class Serving{
         this.container = container;   
     } 
 
-    public Serving(BufferedReader br) throws IOException {
-        this.container = new Container(br);
-        for(int i=0;i<Integer.parseInt(br.readLine()); ++i){ //load mix-ins as 'toppings'
-            addTopping(new MixIn(br));
+    public int price(){
+        int price = 0;
+        for(Scoop s : scoops){
+            price += s.price();
         }
-        for(int i=0;i<Integer.parseInt(br.readLine()); ++i){ //load scoops
-            addScoop(new Scoop(br));
-        }
-    }
-
-    public void save(BufferedWriter bw) throws IOException{
-        container.save(bw);
-        bw.write("" + toppings.size() + '\n');
         for(MixIn top : toppings){
-            top.save(bw);
+            price += top.price();
         }
-        bw.write("" + scoops.size() + '\n');
-        for(Scoop scp : scoops){
-            scp.save(bw);
-        }
+        return price;
+    }
+    
+    public Container container(){
+        return container;
     }
 
     public void addTopping(MixIn top){
@@ -39,6 +32,10 @@ public class Serving{
 
     public void addScoop(Scoop scp){
         scoops.add(scp);
+    }
+
+    public int numScoops(){
+        return scoops.size();
     }
 
                         //one scoop: CONTAINER with a scoop of
@@ -78,6 +75,28 @@ public class Serving{
         }
 
         return contents.toString(); 
+    }
+
+    public Serving(BufferedReader br) throws IOException {
+        this.container = new Container(br);
+        for(int i=0;i<Integer.parseInt(br.readLine()); ++i){ //load mix-ins as 'toppings'
+            addTopping(new MixIn(br));
+        }
+        for(int i=0;i<Integer.parseInt(br.readLine()); ++i){ //load scoops
+            addScoop(new Scoop(br));
+        }
+    }
+
+    public void save(BufferedWriter bw) throws IOException{
+        container.save(bw);
+        bw.write("" + toppings.size() + '\n');
+        for(MixIn top : toppings){
+            top.save(bw);
+        }
+        bw.write("" + scoops.size() + '\n');
+        for(Scoop scp : scoops){
+            scp.save(bw);
+        }
     }
 
     private Container container;

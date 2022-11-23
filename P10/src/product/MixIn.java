@@ -7,12 +7,21 @@ import java.lang.String;
 import java.lang.Integer;
 
 public class MixIn{
-    private MixInFlavor flavor;
-    private MixInAmount amount;
-
     public MixIn(MixInFlavor flavor, MixInAmount amount){
         this.flavor = flavor;
         this.amount = amount;
+    }
+
+    public int price(){
+        return flavor.price();
+    }
+    
+    @Override
+    public String toString(){
+        if(amount==MixInAmount.Normal){
+            return flavor.name();
+        }
+        return flavor.name() + " (" + amount.name() + ")";
     }
 
     public MixIn(BufferedReader br) throws IOException {
@@ -24,12 +33,7 @@ public class MixIn{
         flavor.save(bw);
         bw.write("" + amount.ordinal() + "\n");
     }
-    
-    @Override
-    public String toString(){
-        if(amount==MixInAmount.Normal){
-            return flavor.name();
-        }
-        return flavor.name() + " (" + amount.name() + ")";
-    }
+
+    private MixInFlavor flavor;
+    private MixInAmount amount;
 }
