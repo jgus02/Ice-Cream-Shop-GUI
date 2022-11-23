@@ -54,7 +54,9 @@ public class CreateOrderScreen extends JPanel {
         createServB.setToolTipText("Select a container");
         createServB.addActionListener(event -> openServScreen((Container)contSelect.getSelectedItem()));
         if(emporium.cont().length == 0){
+            createServB.setEnabled(false);
             createServB.setToolTipText("Create a container first!");
+            contSelect.addActionListener(event -> enableServing(createServB));
         }
             //UI management
         GridBagConstraints gbc = new GridBagConstraints();
@@ -89,7 +91,7 @@ public class CreateOrderScreen extends JPanel {
             favSelect = new JComboBox(emporium.favoriteServings(customer));
         }
 
-        addFavB.setToolTipText("Select your favorite serving from the\ndropdown and add it to your order.");
+        addFavB.setToolTipText("Select your favorite serving from the dropdown and add it to your order.");
         addFavB.addActionListener(event -> addServing((Serving)favSelect.getSelectedItem()));
         custSelect.addActionListener(event -> updateFavSelect(favSelect,addFavB,(Customer)custSelect.getSelectedItem()));
             //UI management
@@ -233,6 +235,11 @@ public class CreateOrderScreen extends JPanel {
         main.display.remove(1);
     }
 
+    public void enableServing(JButton createServB){
+        createServB.setEnabled(true);
+        createServB.setToolTipText("Select a container");
+    }
+
     //screens
     public void updateScreen(Screen screen) {
         if(screen == Screen.CONTAINERS){
@@ -254,7 +261,7 @@ public class CreateOrderScreen extends JPanel {
 
     //fields
     private int price;
-    private Customer customer = new Customer("ARE YOU", "SERIOUS");
+    private Customer customer;
     MainWin main;
     JList<Serving> servList;
     Emporium emporium;
