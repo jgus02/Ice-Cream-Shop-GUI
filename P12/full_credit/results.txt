@@ -217,12 +217,20 @@ BONUS
 
 QUESTION 5: Time your version of ThreadedSolver as you did for the full credit version. Is this additional layer of threading faster, slower, or roughly equivalent in performance? Why?
 
-
-
-
+  It averages to slightly higher, ~16.8 seconds real time. When run with 2/4 instead of 4/4 threads, though, it runs at ~20s real and 38s user, vs. 17s real and 58s user...
+  I expect that any advantage I may get is ruined by the fact that I only have 4 processors, but I would expect it to be faster on a machine with more, as there is more space for simultaneous calculations and less opportunity for any downtime on resources.
 
 YOUR Timing:
+  using '--threads 4 --slices 5.0E8 --min -1000 --max 1000 polys/poly4a.poly'
 
+BONUS:
+  real    0m16.794s
+  user    0m57.711s
+  sys     0m0.226s
 
+FULL_CREDIT:
+  real    0m15.146s
+  user    0m57.932s
+  sys     0m0.100s
 
 
