@@ -20,11 +20,6 @@ QUESTION 2: Provide the full output (including the time command) for your progra
 
 for i in {1..16}; do time java Solver --threads $i time java Solver --slices 500000000 --min -1000 --max 1000 polys/poly4a.poly; done
 
-
-
-
-Example Timing (first 2 of 16 runs only on Antares - REPLACE this with your timing for 1 to 16 threads):
-
 jasper@jasper-Notebook:~/git/cse1325/P12/full_credit$ for i in {1..16}; do time java Solver --threads $i --slices 5.0E8 --min -1000 --max 1000 polys/poly4a.poly; done
 Loading polys/poly4a.poly... done
 
@@ -206,20 +201,14 @@ sys     0m0.096s
 
 QUESTION 3: Does adding more threads continue to speed up the program? Do more threads ever slow down the program slightly?  Why or why not?
 
+  Once the user gets past the threshold of their available processors, I would assume that it would hover around the same time, maybe increasing slightly with one or two extra threads if they're able to take advantage of downtime in other threads.
 
-
-
-
-
+  If there are 10000 threads and the user has, say, 4 processors available, I would guess that the process of thread creation and management would start to slow things down again.
 
 
 QUESTION 4: Does adding more threads increase the "system load", or is it constant regardless of the number of threads?  Why?
 
-
-
-
-
-
+  I would think yes, negligibly so, as the system also has to manage those threads and split up the data between them.
 
 
 
