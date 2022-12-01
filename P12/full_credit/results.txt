@@ -1,0 +1,239 @@
+====================
+HOMEWORK P12 RESULTS
+====================
+
+Fall 2022
+
+
+FULL CREDIT
+===========
+
+NOTE: These are measurements which may vary plus your opinions which may vary a LOT. We won't grade for "correctness", just completeness.
+
+QUESTION 1: What Solver command line arguments did you use to achieve a 30 to 45 second runtime? Note: We're only interested in the "real" seconds for this question.
+
+--slices 500000000 --min -1000 --max 1000 --threads 4 polys/poly4a.poly
+  "real    0m35.776s"
+
+
+QUESTION 2: Provide the full output (including the time command) for your program, with 1 to 16 threads. **Ensure that the result is the same for all 16 runs.** (The root found may vary in the least significant digits.) With bash, you can run all of these with a single command if you like, adding whatever Solver command line arguments you identified in QUESTION 1: 
+
+for i in {1..16}; do time java Solver --threads $i time java Solver --slices 500000000 --min -1000 --max 1000 polys/poly4a.poly; done
+
+
+
+
+Example Timing (first 2 of 16 runs only on Antares - REPLACE this with your timing for 1 to 16 threads):
+
+jasper@jasper-Notebook:~/git/cse1325/P12/full_credit$ for i in {1..16}; do time java Solver --threads $i --slices 5.0E8 --min -1000 --max 1000 polys/poly4a.poly; done
+Loading polys/poly4a.poly... done
+
+threads = 1: range -1000.0 to 1000.0, 5.0E8 slices, precision = 1.0E-6
+
+polys/poly4a.poly: +1.00000x^4-26.0000x^2+25.0000x^0 has 4 roots
+  [-4.999999656640092, -0.9999996566916041, 1.000000343310231, 5.000000343258721]
+
+
+real    0m35.945s
+user    0m36.085s
+sys     0m0.052s
+Loading polys/poly4a.poly... done
+
+threads = 2: range -1000.0 to 1000.0, 5.0E8 slices, precision = 1.0E-6
+
+polys/poly4a.poly: +1.00000x^4-26.0000x^2+25.0000x^0 has 4 roots
+  [0.9999995000009174, 5.000000499949406, -4.999999656640092, -0.9999996566916041]
+
+
+real    0m19.564s
+user    0m37.027s
+sys     0m0.040s
+Loading polys/poly4a.poly... done
+
+threads = 3: range -1000.0 to 1000.0, 5.0E8 slices, precision = 1.0E-6
+
+polys/poly4a.poly: +1.00000x^4-26.0000x^2+25.0000x^0 has 4 roots
+  [-5.000000306801933, -1.0000003068534438, 0.9999996931483911, 4.99999969309688]
+
+
+real    0m17.248s
+user    0m48.210s
+sys     0m0.060s
+Loading polys/poly4a.poly... done
+
+threads = 4: range -1000.0 to 1000.0, 5.0E8 slices, precision = 1.0E-6
+
+polys/poly4a.poly: +1.00000x^4-26.0000x^2+25.0000x^0 has 4 roots
+  [0.9999995000009174, 5.000000499949406, -5.000000394261447, -1.0000003943129578]
+
+
+real    0m15.146s
+user    0m57.932s
+sys     0m0.100s
+Loading polys/poly4a.poly... done
+
+threads = 5: range -1000.0 to 1000.0, 5.0E8 slices, precision = 1.0E-6
+
+polys/poly4a.poly: +1.00000x^4-26.0000x^2+25.0000x^0 has 4 roots
+  [-4.999999636834259, -0.9999996368857702, 1.0000003631160646, 5.000000363064554]
+
+
+real    0m15.576s
+user    0m58.872s
+sys     0m0.068s
+Loading polys/poly4a.poly... done
+
+threads = 6: range -1000.0 to 1000.0, 5.0E8 slices, precision = 1.0E-6
+
+polys/poly4a.poly: +1.00000x^4-26.0000x^2+25.0000x^0 has 4 roots
+  [0.9999995000008037, 5.000000499949293, -5.00000030680199, -1.0000003068535006]
+
+
+real    0m15.664s
+user    0m58.213s
+sys     0m0.092s
+Loading polys/poly4a.poly... done
+
+threads = 7: range -1000.0 to 1000.0, 5.0E8 slices, precision = 1.0E-6
+
+polys/poly4a.poly: +1.00000x^4-26.0000x^2+25.0000x^0 has 4 roots
+  [-5.000000349705182, -1.0000003497566938, 0.9999996502451411, 4.999999650193631]
+
+
+real    0m15.327s
+user    0m58.135s
+sys     0m0.100s
+Loading polys/poly4a.poly... done
+
+threads = 8: range -1000.0 to 1000.0, 5.0E8 slices, precision = 1.0E-6
+
+polys/poly4a.poly: +1.00000x^4-26.0000x^2+25.0000x^0 has 4 roots
+  [0.9999995000009174, 5.000000499949406, -4.999999763072124, -0.9999997631236348]
+
+
+real    0m15.199s
+user    0m58.519s
+sys     0m0.076s
+Loading polys/poly4a.poly... done
+
+threads = 9: range -1000.0 to 1000.0, 5.0E8 slices, precision = 1.0E-6
+
+polys/poly4a.poly: +1.00000x^4-26.0000x^2+25.0000x^0 has 4 roots
+  [-4.999999583523978, -0.9999995835754893, 1.0000004164263459, 5.000000416374835]
+
+
+real    0m15.283s
+user    0m58.845s
+sys     0m0.124s
+Loading polys/poly4a.poly... done
+
+threads = 10: range -1000.0 to 1000.0, 5.0E8 slices, precision = 1.0E-6
+
+polys/poly4a.poly: +1.00000x^4-26.0000x^2+25.0000x^0 has 4 roots
+  [0.9999995000009174, 5.000000499949406, -4.999999636834259, -0.9999996368857702]
+
+
+real    0m15.231s
+user    0m58.681s
+sys     0m0.124s
+Loading polys/poly4a.poly... done
+
+threads = 11: range -1000.0 to 1000.0, 5.0E8 slices, precision = 1.0E-6
+
+polys/poly4a.poly: +1.00000x^4-26.0000x^2+25.0000x^0 has 4 roots
+  [-5.000000402270622, -1.0000004023221338, 0.9999995976797011, 4.999999597628191]
+
+
+real    0m15.874s
+user    1m0.158s
+sys     0m0.100s
+Loading polys/poly4a.poly... done
+
+threads = 12: range -1000.0 to 1000.0, 5.0E8 slices, precision = 1.0E-6
+
+polys/poly4a.poly: +1.00000x^4-26.0000x^2+25.0000x^0 has 4 roots
+  [0.9999995000007469, 5.000000499949236, -5.000000219342503, -1.000000219394015]
+
+
+real    0m15.510s
+user    0m58.828s
+sys     0m0.112s
+Loading polys/poly4a.poly... done
+
+threads = 13: range -1000.0 to 1000.0, 5.0E8 slices, precision = 1.0E-6
+
+polys/poly4a.poly: +1.00000x^4-26.0000x^2+25.0000x^0 has 4 roots
+  [-5.00000043063366, -1.0000004306851715, 0.9999995693166632, 4.999999569265153]
+
+
+real    0m15.496s
+user    0m58.670s
+sys     0m0.112s
+Loading polys/poly4a.poly... done
+
+threads = 14: range -1000.0 to 1000.0, 5.0E8 slices, precision = 1.0E-6
+
+polys/poly4a.poly: +1.00000x^4-26.0000x^2+25.0000x^0 has 4 roots
+  [0.999999500001088, 5.000000499949577, -5.000000349705097, -1.0000003497566086]
+
+
+real    0m15.066s
+user    0m58.244s
+sys     0m0.084s
+Loading polys/poly4a.poly... done
+
+threads = 15: range -1000.0 to 1000.0, 5.0E8 slices, precision = 1.0E-6
+
+polys/poly4a.poly: +1.00000x^4-26.0000x^2+25.0000x^0 has 4 roots
+  [-5.000000184766186, -1.000000184817698, 0.9999998151841369, 4.999999815132627]
+
+
+real    0m15.149s
+user    0m58.702s
+sys     0m0.072s
+Loading polys/poly4a.poly... done
+
+threads = 16: range -1000.0 to 1000.0, 5.0E8 slices, precision = 1.0E-6
+
+polys/poly4a.poly: +1.00000x^4-26.0000x^2+25.0000x^0 has 4 roots
+  [0.9999995000009174, 5.000000499949406, -5.000000458135608, -1.0000004581871187]
+
+
+real    0m15.223s
+user    0m58.688s
+sys     0m0.096s
+
+
+QUESTION 3: Does adding more threads continue to speed up the program? Do more threads ever slow down the program slightly?  Why or why not?
+
+
+
+
+
+
+
+
+QUESTION 4: Does adding more threads increase the "system load", or is it constant regardless of the number of threads?  Why?
+
+
+
+
+
+
+
+
+
+BONUS
+=====
+
+QUESTION 5: Time your version of ThreadedSolver as you did for the full credit version. Is this additional layer of threading faster, slower, or roughly equivalent in performance? Why?
+
+
+
+
+
+YOUR Timing:
+
+
+
+
