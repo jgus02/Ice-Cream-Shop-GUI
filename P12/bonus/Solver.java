@@ -55,7 +55,6 @@ public class Solver {
         if(fail) System.exit(-1);
         System.out.println("\nthreads = " + threads + ": range " + min + " to " + max + ", " + slices + " slices, precision = " + precision + "\n");
         ArrayList<Thread> activeThreads = new ArrayList<>();
-        int i = 0;
         final double finalMin = min;
         final double finalMax = max;
         final int finalThreads = threads;  
